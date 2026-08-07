@@ -53,6 +53,55 @@
         "digest": "same"
       },
       "replay_seed": "jcsnum001:canonical:variant_equivalence"
+    },
+    {
+      "fixture_id": "FIXTURE-PROV-001",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_42",
+        "stage": "delegation_gate"
+      },
+      "typed_trigger": "authorization_ok",
+      "evidence_state": {
+        "containment": "pass",
+        "provenance": "pass",
+        "parent_reference_digest": "resolves_live_non_revoked",
+        "authorized_set": [
+          "op-a"
+        ],
+        "actual_set": [
+          "op-a"
+        ],
+        "effect": "simulated_noop"
+      },
+      "replay_seed": "prov001:delegation:containment_pass_provenance_pass",
+      "row_digest_ref": "2ef43568386f0ddd4716d64cdad078770b2fbb13c2c8a37dfc27249c3ffa2776"
+    },
+    {
+      "fixture_id": "FIXTURE-PROV-001-NEG",
+      "terminal_verdict": "UNKNOWN",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_42",
+        "stage": "delegation_gate"
+      },
+      "typed_trigger": "evidence_missing",
+      "evidence_state": {
+        "containment": "pass",
+        "provenance": "fail_orphaned",
+        "parent_reference_digest": "missing_from_ledger",
+        "authorized_set": [
+          "op-a"
+        ],
+        "actual_set": [
+          "op-a"
+        ],
+        "effect": "none_emitted",
+        "reason": "PROVENANCE_AMBIGUOUS_OR_ORPHANED"
+      },
+      "replay_seed": "prov001:delegation:containment_pass_provenance_fail_orphaned",
+      "row_digest_ref": "9fee2c097dd03d29a38a8c73cc1ca48fd9c9d360fec4ea3e9f20994a3e03aadf"
     }
   ]
 }
