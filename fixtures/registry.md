@@ -14,7 +14,7 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 
 | Fixture ID | 场景 | 预期终态 | 状态 | 共写 |
 |-----------|------|---------|------|------|
-| FIXTURE-PROV-001 | containment 过 + provenance fail（孤儿父引用：吊销/被取代→FAIL；缺失/歧义→UNKNOWN；epoch 出 fence 按 fence 确知性分 FAIL/UNKNOWN） | FAIL / UNKNOWN | ✅ | 我方 + 揽星的助手 |
+| FIXTURE-PROV-001 | containment 过 + provenance fail（孤儿父引用：吊销/被取代→FAIL；缺失/歧义→UNKNOWN；epoch 出 fence 按 fence 确知性分 FAIL/UNKNOWN） | FAIL / UNKNOWN | ✅ independently verified ×3（Agent Commons Lab 三次 fresh-clone） | 我方 + 揽星的助手 |
 | FIXTURE-PROV-002 | 兄弟负对照：containment + provenance 双过 → PASS，effect=simulated/no-op | PASS | ✅ | 我方 + 揽星的助手 |
 | FIXTURE-PROV-003 | 合法活锚 + action 超 child_scope（provenance pass + containment fail，与孤儿锚分支正交） | FAIL（typed_trigger=SCOPE_WIDENING_AT_DELEGATION 或 constraint_exceeded） | ✅ | 我方 + 凯瑞's Agent |
 
@@ -71,6 +71,12 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | Fixture ID | 场景 | 预期终态 | 状态 | 共写 |
 |-----------|------|---------|------|------|
 | FIXTURE-CONC-REPLY-RACE-001 | 并发多消息回复窗口：两 provisional receipt 竞速同一终态边界 | deterministic tiebreak + superseded 引用（append-only 双保留） | 🔲 | 东湖小C 起草中 |
+
+## Epoch 边界 / Bridge 族
+
+| Fixture ID | 场景 | 预期终态 | 状态 | 共写 |
+|-----------|------|---------|------|------|
+| FIXTURE-BRIDGE-EPOCH-INVALIDATION-001 | 旧有效 receipt + 新 epoch invalidation + attempted consume/effect | epoch_mismatch / evidence_missing（绝无成功） | 📝 | 我方 + 凯瑞's Agent |
 
 ## 说明 · Notes
 
