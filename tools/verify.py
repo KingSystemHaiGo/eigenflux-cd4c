@@ -114,6 +114,39 @@ def sha256_hex(data: bytes) -> str:
 
 VERDICTS = {"PASS", "INDET", "FAIL", "UNKNOWN", "UNCLASSIFIED"}
 
+# Semantic assertions: beyond byte integrity, the verifier independently derives
+# the expected verdict from provenance semantics for the delegation family.
+# FIXTURE-PROV-001: positive anchor -> PASS; FIXTURE-PROV-001-NEG: orphaned
+# parent -> UNKNOWN (fail-closed, epistemic). A row whose declared verdict
+# contradicts the semantics it encodes is rejected even if digests match.
+def semantic_verdict(row):
+    """Return (expected_verdict, reason) derived from the row's own semantics,
+    or (None, None) when the row is not semantically assertable here."""
+    ev = row.get("evidence_state")
+    if not isinstance(ev, dict):
+        return None, None
+    fid = row.get("fixture_id", "")
+    if fid.startswith("FIXTURE-PROV-001"):
+        prov = ev.get("provenance")
+        if prov == "pass":
+            return "PASS", "provenance pass"
+        if prov == "fail_orphaned":
+            return "UNKNOWN", "orphaned parent reference -> epistemic fail-closed"
+    return None, None
+
+
+def check_semantics(row):
+    expected, reason = semantic_verdict(row)
+    if expected is None:
+        return True, None
+    declared = row.get("terminal_verdict")
+    if declared == expected:
+        return True, None
+    return False, (
+        f"semantic mismatch: {row.get('fixture_id')} declares {declared} "
+        f"but provenance semantics derive {expected} ({reason})"
+    )
+
 
 def verify_manifest(manifest: dict):
     """Verify envelope + row digest chain. Returns (ok, report_lines)."""
@@ -162,6 +195,10 @@ def verify_manifest(manifest: dict):
             ok = False
         if not verdict_ok:
             lines.append(f"  ✗ terminal_verdict not in 5-value set: {row.get('terminal_verdict')}")
+            ok = False
+        sem_ok, sem_msg = check_semantics(row)
+        if not sem_ok:
+            lines.append(f"  ✗ {sem_msg}")
             ok = False
         parent_digest = computed
 

@@ -85,3 +85,25 @@
 - join (scope_id, epoch_id)；0 行 → STALE-UNKNOWN；N 行 → 结果集。
 - seed = 全结果集 canonical digest + witness set digest + 并发窗口 epoch。
 - 同 epoch 冲突：整行 canonical digest 序确定性 tiebreak，绝不用到达顺序；canonical 全同 → duplicate marker + 升级审计。
+
+## 8. Reconciliation 双轴与级联 Drain 语义（显式章节）
+
+### 8.1 Reconciliation 双轴（锁定，与 总指挥 🎖️ 定稿）
+
+- `reconciliation_window { primary_time: ISO8601, secondary_count: int, stall_suspend: bool=true }` + `stall_deadline: ISO8601`（drain block 必填）。
+- **时间为主轴、计数为次轴，任一先到即触发升级**（RECHECK_REQUIRED / ESCALATION）；升级后不自动重试。
+- `secondary_count` = resolve_attempt 计数（重探次数），并入 reconciliation 记账（无独立 WAL schema——两套重探记账会漂移）。
+- `stall_suspend=true`：stalled 期间 primary_time 与 secondary_count **双时钟暂停不推进**（非重置）；解除后已流逝时间不补回（防 stall 延长窗口）；`stall_deadline` 到期未解除 → `DEADLINE_ESCALATION`（escalation_reason=deadline）。
+- stalled 期间新 retry 进**原窗口**轮询（不新开窗），与 DRAINED reconciliation 路径一致。
+
+### 8.2 级联 Drain 语义（多跳 relay 链）
+
+- drain 状态机：`DRAIN_REQUESTED → DRAIN_OBSERVED → DRAIN_SETTLED | DRAIN_ESCALATED`，每跳为 append-only 独立记录；receipt 引用对应 drain transition + post-state digest。
+- 某跳 partial-drain（received < bound）：该跳标 holding + 窗口内重探（双轴取先到）；**partial 状态不向下游传播**——下游只见上游终态（SETTLED/ESCALATED）或显式 holding。
+- 跨跳 receipt 链保证每跳裁决独立可审计；跳间依赖仅通过终态/显式 holding 表达。
+- **null-epoch 边界**（receipt_epoch=null）：不做 epoch 比较，仅按窗口归属判定（归属锚 = DRAIN_OBSERVED transition epoch）；期间 consume/retry = 观察者进原窗口轮询，非 STALE 非重执行。fixture：FIXTURE-NULL-EPOCH-WINDOW-001（欢迎 PR，6-field 行格式）。
+
+### 8.3 ESCALATED receipt 载荷规则
+
+- 触发信息：escalation_trigger + scope_layer + authorized/actual_scope_hash（根因集四字段）。
+- 引用而非复制：escalated_from = 源 receipt digest；部分证据保留在 append-only 链上（每次探测留痕），escalation 行承载裁决 + 引用，不复制载荷（单一事实源）。
