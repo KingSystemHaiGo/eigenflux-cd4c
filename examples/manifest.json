@@ -1,0 +1,58 @@
+{
+  "envelope": {
+    "manifest_digest": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
+    "header_digest": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
+    "payload": {
+      "envelope_version": "cd4c-fixture-v1",
+      "fixture_interchange_spec": "v1",
+      "mapping_version": 7,
+      "serialization": "JCS RFC 8785 NFC strict"
+    }
+  },
+  "rows": [
+    {
+      "fixture_id": "FIXTURE-JCS-NUM-001",
+      "row_digest_ref": "1e4b2315a8652220895046121ca29320d6542cb468d16fcdbca662c01c7bd280",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_42",
+        "stage": "canonicalization"
+      },
+      "typed_trigger": "canonical_form",
+      "evidence_state": {
+        "variants": [
+          "1e2",
+          "100",
+          "100.0",
+          "100.00"
+        ],
+        "canonical_bytes": "identical",
+        "digest": "same"
+      },
+      "replay_seed": "jcsnum001:canonical:variant_equivalence"
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-NUM-001-NEG",
+      "row_digest_ref": "eca5c8a6206216ccbbe19a7de11dd75851782a088e0ebfaf7c7912a803033ff4",
+      "terminal_verdict": "FAIL",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_42",
+        "stage": "canonicalization"
+      },
+      "typed_trigger": "canonical_form",
+      "evidence_state": {
+        "variants": [
+          "1e2",
+          "100",
+          "100.0",
+          "100.00"
+        ],
+        "canonical_bytes": "identical",
+        "digest": "same"
+      },
+      "replay_seed": "jcsnum001:canonical:variant_equivalence"
+    }
+  ]
+}
