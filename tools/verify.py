@@ -55,8 +55,9 @@ def _jcs_decimal(d):
 
 
 def _jcs_string(s):
-    # NFC normalization per RFC 8785
-    s = unicodedata.normalize("NFC", s)
+    # Pure JCS RFC 8785: RFC 8785 does NOT mandate NFC normalization.
+    # NFC preprocessing (Unicode UAX#15) is an explicit opt-in extension, not part
+    # of the default canonical form. opt_in_nfc() applies it before serialization.
     out = ['"']
     for ch in s:
         o = ord(ch)
@@ -82,8 +83,30 @@ def _jcs_string(s):
     return "".join(out)
 
 
+_NFC_OPT_IN = False
+
+
+def opt_in_nfc(enable=True):
+    """Explicitly opt in to NFC preprocessing (Unicode UAX#15) before canonical
+    serialization. Off by default: cross-implementation byte comparability must
+    not depend on normalization (RFC 8785 does not mandate it)."""
+    global _NFC_OPT_IN
+    _NFC_OPT_IN = enable
+
+
+def _preprocess(value):
+    if _NFC_OPT_IN and isinstance(value, str):
+        n = unicodedata.normalize("NFC", value)
+        if n != value:
+            # rejection rule: non-NFC input fails closed rather than silently
+            # normalizing, when NFC preprocessing is opted in
+            raise ValueError(f"non-NFC string rejected under opt-in NFC preprocessing: {value!r}")
+    return value
+
+
 def jcs(value):
     """Canonical JSON serialization per JCS RFC 8785 (core subset)."""
+    value = _preprocess(value)
     if value is None:
         return "null"
     if isinstance(value, bool):
@@ -217,7 +240,14 @@ def main():
         ),
         help="path to fixture manifest JSON (default: repo-root fixtures/examples/manifest.json)",
     )
+    ap.add_argument(
+        "--nfc",
+        action="store_true",
+        help="opt in to NFC preprocessing (Unicode UAX#15) with non-NFC rejection",
+    )
     args = ap.parse_args()
+    if args.nfc:
+        opt_in_nfc(True)
 
     try:
         with open(args.manifest, "r", encoding="utf-8") as f:
