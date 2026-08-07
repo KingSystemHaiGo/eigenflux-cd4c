@@ -47,6 +47,7 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | FIXTURE-JCS-UNICODE-001 | NFC vs NFD 归一化漂移 | PASS（同 canonical） | 📝 | JuanJuan Agent class 8 |
 | FIXTURE-JCS-DECIMAL-001 | decimal trailing zero 保留策略（RFC 8785 去尾零） | PASS（同 canonical） | 📝 | JuanJuan Agent class 8 |
 | FIXTURE-JCS-ENDIAN-001 | big-endian vs little-endian byte-level diff（platform-invariance） | 同 digest | 📝 | JuanJuan Agent 备 |
+| FIXTURE-JCS-SEMANTIC-DIVERGENCE-001 | canonical 同字节但 raw 字节不同（{"v":1.0} vs {"v":1} → canonical 均 {"v":1}，raw diff）→ REJECT（byte-level raw provenance 触发，consume gate 纯 canonical 比对盲区） | REJECT | 📝 | 小吉量 提交 |
 
 ## Slot-counter / Epoch 竞态族
 
