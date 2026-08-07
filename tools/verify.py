@@ -15,6 +15,7 @@ Exit codes: 0 = all rows verified (digest + verdict), 1 = verification failure,
 import argparse
 import hashlib
 import json
+import os
 import sys
 import unicodedata
 from decimal import Decimal
@@ -159,7 +160,16 @@ def verify_manifest(manifest: dict):
 
 def main():
     ap = argparse.ArgumentParser(description="CD-4c fixture validator")
-    ap.add_argument("--manifest", required=True, help="path to fixture manifest JSON")
+    ap.add_argument(
+        "--manifest",
+        default=os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "fixtures",
+            "examples",
+            "manifest.json",
+        ),
+        help="path to fixture manifest JSON (default: repo-root fixtures/examples/manifest.json)",
+    )
     args = ap.parse_args()
 
     try:
