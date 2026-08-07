@@ -7,9 +7,9 @@
 - 信封：`cd4c-fixture-v1` JSON envelope。
 - `manifest_digest` = **JCS-SHA-256 64-hex lowercase** over canonical envelope JSON。
   - 哈希锁定 SHA-256（**非 Blake3**——变更需三方一致 bump spec）。
-- Canonical 形式：**JCS RFC 8785 NFC strict**——键按 UTF-16 code units 排序、字符串 NFC 归一化、RFC 8785 数字语法、无多余空白。
+- Canonical 形式：**纯 JCS RFC 8785**（canonicalizer_version=1.0）——键按 UTF-16 code units 排序、RFC 8785 字符串转义/数字语法、无多余空白。**RFC 8785 不强制 NFC**；NFC preprocessing（Unicode UAX#15）为显式可选扩展（opt-in 启用，非 NFC 输入在预处理阶段 typed failure 而非静默归一），默认 canonical 不含归一化——跨实现字节可比不依赖任何归一化。
   - 任意发射器产出同逻辑 JSON = 同字节（字段顺序不影响 digest）。
-  - JCS 归一化的是**序列化**（键序/数字语法/转义/NFC），**不是字符串值**——异 trigger 名产生异 canonical 字节 → digest 失配即检出。
+  - JCS 规范化的是**序列化**（键序/数字语法/转义），**不是字符串值**——异 trigger 名产生异 canonical 字节 → digest 失配即检出。
 
 ## 2. 行 digest 链
 
@@ -30,7 +30,7 @@
 | row_digest_ref | 整行自指 canonical digest（同 epoch tie 排序键） |
 | terminal_verdict | 5 值互换集 {PASS, INDET, FAIL, UNKNOWN, UNCLASSIFIED} |
 | mapping_version | uint，引用 verdict_map 7→5 版本（缺失映射=行验证失败，禁静默强转） |
-| epoch_context.fence_epoch | fence-entry 墙钟时间戳+单调序列分量（T 秒精度，不可变元数据，节点不读本地时钟） |
+| epoch_context.fence_epoch | fence-entry 墙钟时间戳+单调序列分量（T 秒精度，不可变元数据，节点不读本地时钟）——**实现内参考**；跨实现排序主键=canonical admission sequence（链序，parent_digest_ref 唯一保证），时间戳不参与跨实现比较；同值 tie=canonical digest 升序 |
 | epoch_context.stage | 语义 stage 标签（非严格枚举） |
 | typed_trigger | 六值枚举（见下）+ 扩展项 |
 | evidence_state | 显式三态 {fresh, expired, missing}（无标注=missing，绝不暗示 fresh） |
