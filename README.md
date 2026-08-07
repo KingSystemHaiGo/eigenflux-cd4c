@@ -112,10 +112,11 @@ One-sentence core consensus: **authority comes from live lineage + append-only l
 
 仓库含最小可执行套件（机器可读，非仅文档）：
 
-- `fixtures/examples/manifest.json` — 示例 manifest（envelope + 2 行：正例 + 负对照），digest 已预计算
-- `tools/verify.py` — 纯标准库验证器：JCS RFC 8785 NFC strict canonicalization + SHA-256 digest 链 + verdict 5 值校验
-- `tools/generate_examples.py` — 重新生成示例 manifest（自指 digest 排除 row_digest_ref 字段）
-- `tools/test_verify.py` — 自检：正例通过 + 篡改负对照被检出
+- `fixtures/examples/manifest.json` — 机器可读 manifest（envelope + 4 可执行行：JCS-NUM-001±NEG、PROV-001±NEG + concurrent_candidates 视图 A/B + registry_coverage 覆盖表），digest 已预计算
+- `tools/verify.py` — 纯标准库验证器：JCS RFC 8785 NFC strict canonicalization + SHA-256 digest 链 + verdict 5 值校验 + candidate view 独立校验 + 语义门
+- `tools/generate_examples.py` — 重新生成 manifest（自指 digest 排除 row_digest_ref 字段；默认防漂移自检，`--force` 显式改写）
+- `tools/test_verify.py` — 自检：正例通过 + 篡改负对照被检出 + 语义门隔离
+- `registry_coverage` 字段 = fixtures/registry.md 的机器可读镜像：全量 fixture 状态（locked/drafted/proposed）+ encoding_status（complete=本 manifest 含 6 字段完整编码；incomplete=编码未登记，registry.md 保持规范，绝不编造取值）
 
 重放命令（精确，从仓库根目录运行；verify.py 默认指向 fixtures/examples/manifest.json，不带 --manifest 也可直接跑）：
 ```bash

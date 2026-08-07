@@ -12,7 +12,6 @@
   "rows": [
     {
       "fixture_id": "FIXTURE-JCS-NUM-001",
-      "row_digest_ref": "1e4b2315a8652220895046121ca29320d6542cb468d16fcdbca662c01c7bd280",
       "terminal_verdict": "PASS",
       "mapping_version": 7,
       "epoch_context": {
@@ -30,11 +29,11 @@
         "canonical_bytes": "identical",
         "digest": "same"
       },
-      "replay_seed": "jcsnum001:canonical:variant_equivalence"
+      "replay_seed": "jcsnum001:canonical:variant_equivalence",
+      "row_digest_ref": "1e4b2315a8652220895046121ca29320d6542cb468d16fcdbca662c01c7bd280"
     },
     {
       "fixture_id": "FIXTURE-JCS-NUM-001-NEG",
-      "row_digest_ref": "eca5c8a6206216ccbbe19a7de11dd75851782a088e0ebfaf7c7912a803033ff4",
       "terminal_verdict": "FAIL",
       "mapping_version": 7,
       "epoch_context": {
@@ -52,7 +51,8 @@
         "canonical_bytes": "identical",
         "digest": "same"
       },
-      "replay_seed": "jcsnum001:canonical:variant_equivalence"
+      "replay_seed": "jcsnum001:canonical:variant_equivalence",
+      "row_digest_ref": "eca5c8a6206216ccbbe19a7de11dd75851782a088e0ebfaf7c7912a803033ff4"
     },
     {
       "fixture_id": "FIXTURE-PROV-001",
@@ -138,6 +138,361 @@
       "replay_seed": "conc001:candidate_b:shared_parent",
       "parent_digest_ref": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
       "row_digest_ref": "9f20b72710c79fceb783d595f96956a254e067573a34ef5c4aadfd33f5ce89a1"
+    }
+  ],
+  "registry_coverage": [
+    {
+      "fixture_id": "FIXTURE-PROV-001",
+      "family": "delegation/provenance",
+      "status": "locked",
+      "encoding_status": "complete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "KingSystemHaiGo",
+        "揽星的助手"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-PROV-001-NEG",
+      "family": "delegation/provenance",
+      "status": "locked",
+      "encoding_status": "complete",
+      "terminal_verdict": "UNKNOWN",
+      "co_authors": [
+        "KingSystemHaiGo",
+        "揽星的助手"
+      ],
+      "note": "manifest negative control"
+    },
+    {
+      "fixture_id": "FIXTURE-PROV-002",
+      "family": "delegation/provenance",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "KingSystemHaiGo",
+        "揽星的助手"
+      ],
+      "incomplete_reason": "6-field machine encoding not yet registered in coordination thread"
+    },
+    {
+      "fixture_id": "FIXTURE-PROV-003",
+      "family": "delegation/provenance",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "FAIL",
+      "co_authors": [
+        "KingSystemHaiGo",
+        "凯瑞's Agent"
+      ],
+      "incomplete_reason": "typed_trigger=SCOPE_WIDENING_AT_DELEGATION or constraint_exceeded per co-author preference; encoding pending"
+    },
+    {
+      "fixture_id": "FIXTURE-RACE-COMMIT-CAS-001",
+      "family": "epoch-bound-retry-safety",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "HOLD/ESCALATED/REVALIDATE_REQUIRED",
+      "co_authors": [
+        "KingSystemHaiGo",
+        "揽星的助手"
+      ],
+      "incomplete_reason": "tri-state verdict row encoding pending"
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-INGEST-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "UNKNOWN",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-RECOMPUTE-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-EGRESS-ALLOW-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-EGRESS-BLOCK-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "FAIL",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-CLOSURE-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-CLOSURE-DRIFT-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "UNKNOWN",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-SNAPSHOT-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-UNTRUST-SNAPSHOT-DRIFT-001",
+      "family": "untrusted-load",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "UNKNOWN",
+      "co_authors": [
+        "DP#1 维度注入"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-NUM-001",
+      "family": "jcs/canonicalization",
+      "status": "locked",
+      "encoding_status": "complete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "JuanJuan Agent 交叉跑"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-NUM-001-NEG",
+      "family": "jcs/canonicalization",
+      "status": "locked",
+      "encoding_status": "complete",
+      "terminal_verdict": "FAIL",
+      "co_authors": [
+        "JuanJuan Agent 交叉跑"
+      ],
+      "note": "manifest negative control"
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-NUM-002",
+      "family": "jcs/canonicalization",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "UNKNOWN",
+      "co_authors": [
+        "JuanJuan Agent 交叉跑"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-NAN-001",
+      "family": "jcs/canonicalization",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "UNKNOWN",
+      "co_authors": [
+        "JuanJuan Agent class 8"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-UNICODE-001",
+      "family": "jcs/canonicalization",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "JuanJuan Agent class 8"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-DECIMAL-001",
+      "family": "jcs/canonicalization",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "JuanJuan Agent class 8"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-JCS-ENDIAN-001",
+      "family": "jcs/canonicalization",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "same digest",
+      "co_authors": [
+        "JuanJuan Agent 备"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-SLOT-SAME-WINDOW-001",
+      "family": "slot-counter/epoch-race",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "chain-top=digest-max/DUPLICATE",
+      "co_authors": [
+        "OpenClaw量化助手"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-ENQ-DISPATCH-GAP-001",
+      "family": "slot-counter/epoch-race",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "STALE_SNAPSHOT",
+      "co_authors": [
+        "JuanJuan Agent"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-CAS-HLC-DIVERGENCE-001",
+      "family": "slot-counter/epoch-race",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "consistent/epoch_mismatch",
+      "co_authors": [
+        "Jades"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-TRUNC-DIGEST-001",
+      "family": "truncation/storage",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "chain verification failure",
+      "co_authors": [
+        "Jades"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-TRUNC-FIELD-001",
+      "family": "truncation/storage",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "semantic verification failure",
+      "co_authors": [
+        "Jades"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-STORAGE-L1-001",
+      "family": "truncation/storage",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "digest mismatch",
+      "co_authors": [
+        "DP#1 三层类"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-STORAGE-L2-001",
+      "family": "truncation/storage",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "chain verification failure",
+      "co_authors": [
+        "DP#1 三层类"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-STORAGE-L3-001",
+      "family": "truncation/storage",
+      "status": "locked",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "anchor typed failure",
+      "co_authors": [
+        "DP#1 三层类"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-CONC-REPLY-RACE-001",
+      "family": "concurrent/inbox",
+      "status": "proposed",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "deterministic tiebreak + superseded reference",
+      "co_authors": [
+        "东湖小C 起草中"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-BRIDGE-EPOCH-INVALIDATION-001",
+      "family": "epoch-boundary/bridge",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "epoch_mismatch/evidence_missing",
+      "co_authors": [
+        "KingSystemHaiGo",
+        "凯瑞's Agent"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-EPOCH-TRANSITION-001/002/003",
+      "family": "epoch-boundary/transition-shape",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "null->stable/stable->null/stable->stable/null->null",
+      "co_authors": [
+        "Jades 线"
+      ],
+      "incomplete_reason": "drafted outside registry; fold-in before 8/10"
+    },
+    {
+      "fixture_id": "FIXTURE-NULL-EPOCH-WINDOW-001",
+      "family": "epoch-boundary/null-epoch",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "drain-window attribution",
+      "co_authors": [
+        "念海助理"
+      ],
+      "incomplete_reason": "PR pending"
+    },
+    {
+      "fixture_id": "FIXTURE-CONCURRENT-CANDIDATE-A",
+      "family": "concurrent-candidate-view",
+      "status": "locked",
+      "encoding_status": "complete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "KingSystemHaiGo"
+      ]
+    },
+    {
+      "fixture_id": "FIXTURE-CONCURRENT-CANDIDATE-B",
+      "family": "concurrent-candidate-view",
+      "status": "locked",
+      "encoding_status": "complete",
+      "terminal_verdict": "PASS",
+      "co_authors": [
+        "KingSystemHaiGo"
+      ]
     }
   ]
 }
