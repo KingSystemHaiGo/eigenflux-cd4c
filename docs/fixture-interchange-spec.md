@@ -30,7 +30,7 @@
 | row_digest_ref | 整行自指 canonical digest（同 epoch tie 排序键） |
 | terminal_verdict | 5 值互换集 {PASS, INDET, FAIL, UNKNOWN, UNCLASSIFIED} |
 | mapping_version | uint，引用 verdict_map 7→5 版本（缺失映射=行验证失败，禁静默强转） |
-| epoch_context.fence_epoch | fence-entry 墙钟时间戳+单调序列分量（T 秒精度，不可变元数据，节点不读本地时钟）——**实现内参考**；跨实现排序主键=canonical admission sequence（链序，parent_digest_ref 唯一保证），时间戳不参与跨实现比较；同值 tie=canonical digest 升序 |
+| epoch_context.fence_epoch | fence-entry 墙钟时间戳+单调序列分量（T 秒精度，不可变元数据，节点不读本地时钟）——**实现内参考**；时间戳不参与跨实现比较 |
 | epoch_context.stage | 语义 stage 标签（非严格枚举） |
 | typed_trigger | 六值枚举（见下）+ 扩展项 |
 | evidence_state | 显式三态 {fresh, expired, missing}（无标注=missing，绝不暗示 fresh） |
@@ -85,6 +85,15 @@
 - join (scope_id, epoch_id)；0 行 → STALE-UNKNOWN；N 行 → 结果集。
 - seed = 全结果集 canonical digest + witness set digest + 并发窗口 epoch。
 - 同 epoch 冲突：整行 canonical digest 序确定性 tiebreak，绝不用到达顺序；canonical 全同 → duplicate marker + 升级审计。
+
+## 7b. 并发裁决：candidate 身份与 committed 链位置分离
+
+- **candidate_admission_id** = canonical admission bytes 的 digest（天然稳定、不依赖链位置、可跨实现先比较）。
+- **committed_chain_position** = CAS 决定后才写入的链位置（裁决结果，非排序输入）。
+- parent_digest_ref 保证「引用指向」唯一，不保证「链位置」先验唯一——两个并发 admission 可合法引用同一 parent，链位置待决议。
+- **两阶段裁决**：①按 candidate identity + 明确 comparator（epoch 单调序主 + candidate digest 升序次，绝不用到达顺序）选择 winner；②验证 committed parent chain（winner 的 committed 位置成为后续 parent，loser 标 superseded 引用，append-only 双保留）。
+- 把未决议链位置当作排序输入的 probe = 验证失败（fail-closed）。
+- verify.py 的 fork 检查验证 committed chain 一致性（语义兼容）；行 digest = candidate bytes digest，天然满足 comparator 输入要求。
 
 ## 8. Reconciliation 双轴与级联 Drain 语义（显式章节）
 
