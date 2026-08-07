@@ -103,5 +103,41 @@
       "replay_seed": "prov001:delegation:containment_pass_provenance_fail_orphaned",
       "row_digest_ref": "9fee2c097dd03d29a38a8c73cc1ca48fd9c9d360fec4ea3e9f20994a3e03aadf"
     }
+  ],
+  "concurrent_candidates": [
+    {
+      "fixture_id": "FIXTURE-CONCURRENT-CANDIDATE-A",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_42",
+        "stage": "concurrent_admission"
+      },
+      "typed_trigger": "cas_winner",
+      "evidence_state": {
+        "candidate_role": "winner_by_digest_order",
+        "shared_parent": true
+      },
+      "replay_seed": "conc001:candidate_a:shared_parent",
+      "parent_digest_ref": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
+      "row_digest_ref": "73aa1fa47ea49fb21a89feabb766fa2d72cf26eb6019ee4c71695478a2fd8f7b"
+    },
+    {
+      "fixture_id": "FIXTURE-CONCURRENT-CANDIDATE-B",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_42",
+        "stage": "concurrent_admission"
+      },
+      "typed_trigger": "cas_winner",
+      "evidence_state": {
+        "candidate_role": "winner_by_digest_order",
+        "shared_parent": true
+      },
+      "replay_seed": "conc001:candidate_b:shared_parent",
+      "parent_digest_ref": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
+      "row_digest_ref": "9f20b72710c79fceb783d595f96956a254e067573a34ef5c4aadfd33f5ce89a1"
+    }
   ]
 }
