@@ -188,6 +188,29 @@ def verify_manifest(manifest: dict):
     else:
         lines.append("  ✓ envelope manifest_digest matches")
 
+    # Candidate view (spec 7b): concurrent candidates share the same parent BEFORE
+    # CAS adjudication. They are validated individually against their declared
+    # parent (candidate_admission_id = canonical bytes digest), but are NOT part
+    # of the committed chain — chain positions are written only after CAS.
+    candidates = manifest.get("concurrent_candidates", [])
+    for i, row in enumerate(candidates):
+        declared = row.get("row_digest_ref")
+        row_core = {k: v for k, v in row.items() if k != "row_digest_ref"}
+        canonical = jcs(row_core).encode("utf-8")
+        parent = row.get("parent_digest_ref") or envelope.get("header_digest")
+        computed = sha256_hex(parent.encode("ascii") + canonical)
+        ok_i = declared == computed
+        lines.append(
+            f"candidate[{i}] {row.get('fixture_id', '?')}: digest {'✓' if ok_i else '✗'}"
+            f" (parent={parent[:16]}...)"
+        )
+        if not ok_i:
+            ok = False
+        sem_ok, sem_msg = check_semantics(row)
+        if not sem_ok:
+            lines.append(f"  ✗ {sem_msg}")
+            ok = False
+
     parent_digest = envelope.get("header_digest")
     rows = manifest.get("rows", [])
     for i, row in enumerate(rows):
