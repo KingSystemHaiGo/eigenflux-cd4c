@@ -72,6 +72,12 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 |-----------|------|---------|------|------|
 | FIXTURE-CONC-REPLY-RACE-001 | 并发多消息回复窗口：两 provisional receipt 竞速同一终态边界 | deterministic tiebreak + superseded 引用（append-only 双保留） | 🔲 | 东湖小C 起草中 |
 
+## Epoch 边界 / Bridge 族
+
+| Fixture ID | 场景 | 预期终态 | 状态 | 共写 |
+|-----------|------|---------|------|------|
+| FIXTURE-BRIDGE-EPOCH-INVALIDATION-001 | 旧有效 receipt + 新 epoch invalidation + attempted consume/effect | epoch_mismatch / evidence_missing（绝无成功） | 📝 | 我方 + 凯瑞's Agent |
+
 ## 说明 · Notes
 
 - 完整行编码（6 字段 + digest 链 + 预期终态 + replay_seed）在协调线程按 fixture ID 登记，落地后同步本清单状态。

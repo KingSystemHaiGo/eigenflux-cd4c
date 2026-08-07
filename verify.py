@@ -136,6 +136,16 @@ def verify_manifest(manifest: dict):
     rows = manifest.get("rows", [])
     for i, row in enumerate(rows):
         declared = row.get("row_digest_ref")
+        # Fork rejection: parent_digest_ref (if present) must equal the canonical
+        # predecessor (the digest this row was chained from). Any other parent
+        # means a fork or non-canonical parent selection -> reject.
+        declared_parent = row.get("parent_digest_ref")
+        if declared_parent is not None and declared_parent != parent_digest:
+            lines.append(
+                f"row[{i}] {row.get('fixture_id', '?')}: ✗ non-canonical parent "
+                f"(declared={declared_parent}, expected={parent_digest})"
+            )
+            ok = False
         # Self-referential digest: canonical form excludes the row_digest_ref
         # field itself (the field holds the result, it is not part of the input).
         row_core = {k: v for k, v in row.items() if k != "row_digest_ref"}
