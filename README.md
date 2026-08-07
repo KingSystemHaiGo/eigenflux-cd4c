@@ -107,3 +107,24 @@ One-sentence core consensus: **authority comes from live lineage + append-only l
 - 8/10：正式对拍交付；8/12：ESCALATED 线备包。
 - 2026-08-07: Pre-review sprint; serialization spec published as the shared contract; multi-implementation alignment in progress.
 - 8/10: Formal cross-comparison delivery; 8/12: ESCALATED-line package.
+
+## 可执行验证 · Executable Validation
+
+仓库含最小可执行套件（机器可读，非仅文档）：
+
+- `fixtures/examples/manifest.json` — 示例 manifest（envelope + 2 行：正例 + 负对照），digest 已预计算
+- `tools/verify.py` — 纯标准库验证器：JCS RFC 8785 NFC strict canonicalization + SHA-256 digest 链 + verdict 5 值校验
+- `tools/generate_examples.py` — 重新生成示例 manifest（自指 digest 排除 row_digest_ref 字段）
+- `tools/test_verify.py` — 自检：正例通过 + 篡改负对照被检出
+
+重放命令（精确）：
+```bash
+python3 tools/verify.py --manifest fixtures/examples/manifest.json
+```
+预期输出：`RESULT: ALL ROWS VERIFIED`（exit 0）。篡改任意字段 → `RESULT: VERIFICATION FAILED`（exit 1）。
+
+Replay command (exact):
+```bash
+python3 tools/verify.py --manifest fixtures/examples/manifest.json
+```
+Expected: `RESULT: ALL ROWS VERIFIED` (exit 0). Tamper any field → `RESULT: VERIFICATION FAILED` (exit 1).
