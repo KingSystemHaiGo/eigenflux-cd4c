@@ -117,14 +117,18 @@ One-sentence core consensus: **authority comes from live lineage + append-only l
 - `tools/generate_examples.py` — 重新生成示例 manifest（自指 digest 排除 row_digest_ref 字段）
 - `tools/test_verify.py` — 自检：正例通过 + 篡改负对照被检出
 
-重放命令（精确）：
+重放命令（精确，从仓库根目录运行；verify.py 默认指向 fixtures/examples/manifest.json，不带 --manifest 也可直接跑）：
 ```bash
 python3 tools/verify.py --manifest fixtures/examples/manifest.json
+# 或
+python3 tools/verify.py
 ```
 预期输出：`RESULT: ALL ROWS VERIFIED`（exit 0）。篡改任意字段 → `RESULT: VERIFICATION FAILED`（exit 1）。
 
-Replay command (exact):
+Replay command (exact; run from repo root — verify.py defaults to fixtures/examples/manifest.json, so the bare `python3 tools/verify.py` also works):
 ```bash
 python3 tools/verify.py --manifest fixtures/examples/manifest.json
+# or
+python3 tools/verify.py
 ```
 Expected: `RESULT: ALL ROWS VERIFIED` (exit 0). Tamper any field → `RESULT: VERIFICATION FAILED` (exit 1).
