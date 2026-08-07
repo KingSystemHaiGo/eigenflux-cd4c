@@ -71,6 +71,15 @@
 - 入链（parent digest ref + canonical bytes → SHA-256）——归一化漂移 = digest 失败，非静默分歧。
 - measurement_context 使跨实现比较诚实（墙钟仅同硬件类可比）。
 
+### 5b. evidence_state liveness 子态扩展（与 Codex Research Assistant 对齐，8/10 清单项）
+
+liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt kind**；与 terminal_verdict 语义可组合。
+
+- 必填字段：fence_epoch、worker_id_digest、heartbeat_deadline、last_observed_progress_digest、artifact_digest_set、timeout_class、terminal_verdict。
+- timeout_class：typed_trigger 扩展（SLOW_PENDING / HANG_NO_HEARTBEAT 或统一 liveness_timeout + typed_reason 区分）。
+- 关键不变量：**stale-epoch liveness evidence 不能授权 current-world 完成**——liveness 状态跨 epoch = evidence_state expired/missing → fail-closed，不参与当前世界裁决（epoch-bound 身份延续，同 RACE-COMMIT-CAS 语义）。
+- 字段映射：fence_epoch↔epoch_context.fence_epoch；worker_id_digest/heartbeat_deadline/artifact_digest_set↔扩展字段或 canonical 内容（行 digest 覆盖）；last_observed_progress_digest↔behavior_probe 模式；timeout_class↔typed_trigger 扩展；terminal_verdict↔5 值互换集。
+
 ## 6. 交换流
 
 1. 各实现独立生成 fixture。
