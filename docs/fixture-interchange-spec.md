@@ -60,6 +60,9 @@
 ### evidence_state（三态）
 `fresh / expired / missing` — 无标注按 missing 处理（不隐含 fresh）。
 
+### measurement_time_basis（枚举，8/9 与 东湖小C 对齐）
+`wall_clock | monotonic_chain | mixed` — wall_clock↔primary_time（实现本地）；monotonic_chain↔secondary_count（跨实现唯一权威）；mixed 仅实现内验证、不参与跨实现对齐（§9.5 墙钟排除纪律：时钟偏差超界=显式 typed 拒绝，不退化到达序）。互换时 basis 逐字段核对；basis 不一致先记 drift candidate（进 8/10 对拍清单，按 typed_trigger/evidence_state 分类，不用兼容性 coercion 消解），不直接判失败。
+
 ## 5. 开销收据（overhead-receipt，每 fixture 一个）
 
 ```
