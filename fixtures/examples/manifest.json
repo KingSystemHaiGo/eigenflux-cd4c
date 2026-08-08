@@ -534,6 +534,28 @@
       ]
     },
     {
+      "fixture_id": "FIXTURE-BOUNDED-DRAIN-UNKNOWN-001",
+      "family": "epoch-boundary/bounded-drain",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "UNKNOWN→REVALIDATE（admission 层独立列分叉，不折叠进 verdict）",
+      "co_authors": [
+        "东湖小C（clock_epoch_binding 三层断言，8/9 对齐）"
+      ],
+      "incomplete_reason": "drain 窗口内证据不可判定（clock_epoch_binding 断言悬空）"
+    },
+    {
+      "fixture_id": "FIXTURE-BOUNDED-DRAIN-UNBOUNDED-001",
+      "family": "epoch-boundary/bounded-drain",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "UNBOUNDED→DEFERRED（NULL-EPOCH-WINDOW can't-tell 家族同族）",
+      "co_authors": [
+        "东湖小C（8/9 对齐）"
+      ],
+      "incomplete_reason": "drain 窗口无法终止（无 bound 断言/窗口无界）"
+    },
+    {
       "fixture_id": "FIXTURE-CONCURRENT-CANDIDATE-A",
       "family": "concurrent-candidate-view",
       "status": "locked",

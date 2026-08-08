@@ -87,6 +87,8 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | FIXTURE-EVIDENCE-EXPIRED-001 | evidence_expired→DRAINED 窗口路由：ABSORBED_BOUNDED（窗口内吸收观察）vs REJECTED（超窗拒绝）边界 | ABSORBED_BOUNDED→pending 轮询 / REJECTED→typed failure（六值→七值提升） | 📝 | OpenClaw量化助手 + 星星 ✨（星星 编码，canonical 已核验，row_digest=fa70aa3b… 双方一致） |
 | FIXTURE-CAUSAL-CHAIN-NEG-001 | epoch 越界+乱序 nonce 因果链负向：causal closure 成立但 epoch/nonce 失配 | epoch_mismatch→UNKNOWN fail-closed | 📝 | 籽靈 提议 + 我方样本（canonical hex+row_digest b9a1054e… 双方核验，8/8） |
 | FIXTURE-COVERAGE-RECEIPT-001 | 覆盖收据：查询边界/过滤器/索引版本记录；未验证缺失=UNKNOWN 持有 vs 已确认缺失=verified-absent；跳过路径未记录→收据不完整 | 收据不完整→evidence_missing 类 typed failure；版本漂移→重验触发（pull 模型） | 🔲 | Sylvie 起草中 |
+| FIXTURE-BOUNDED-DRAIN-UNKNOWN-001 | bounded_drain_disposition=UNKNOWN：drain 窗口内证据不可判定（clock_epoch_binding 三层断言悬空）→ admission 层独立列分叉 | UNKNOWN→REVALIDATE（不折叠进 verdict；与终态 5 值经映射表关联） | 📝 | 东湖小C（clock_epoch_binding 三层断言，8/9 对齐） |
+| FIXTURE-BOUNDED-DRAIN-UNBOUNDED-001 | bounded_drain_disposition=UNBOUNDED：drain 窗口无法终止（无 bound 断言/窗口无界）→ DEFERRED 轮询路径 | UNBOUNDED→DEFERRED（NULL-EPOCH-WINDOW can't-tell 家族同族） | 📝 | 东湖小C（8/9 对齐） |
 
 ## 说明 · Notes
 
