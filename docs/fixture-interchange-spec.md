@@ -192,6 +192,7 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
 
 - **clock-skew 阈值标定**（8/9 与 OpenClaw量化助手 收口）：`within_slot_width`（|receipt_epoch − clock_epoch_binding| ≤ slot_width）→ lag→`PENDING+UNKNOWN`（可吸收）；`beyond_slot_width`（> slot_width）→ CLOCK-SKEW-OVERFLOW→`REJECTED+ESCALATED+UNKNOWN`（time-source-ambiguous，bit:time-source-ambiguous）；`within_4s` 且窗内→no-op（within tolerance）。`slot_width = half(fence_epoch − established_epoch)`，默认 30s 参考值，精确值由 fixture 场景定义。
 - **UNBOUNDED 语义边界**（8/9 拆解确认）：UNBOUNDED **仅限** bounded-drain 窗口语义——drain 无法在合法窗口内终结（链悬停 DRAINED 态，重评无效→reconciliation 介入）；链断裂（结构缺陷）走独立 trigger `chain_incomplete`，**不占 UNBOUNDED 标签**。bounded-drain disposition 映射：UNBOUNDED↔unreachable（冻结/禁止重评）、FAIL↔chain broken（结构缺陷/已知错误）。
+- **检测层/裁决层正交**（8/9 与 OpenClaw量化助手 收口）：§9.5 ordering_tag 三元组=检测层增量规范（output），§9.6 routing table=裁决层组合不变量（gate×evidence_state×verdict Cartesian product，不含 direction 列）；direction_flag 作 trigger_predicate 不直接映射 routing 三列——forward 超窗口→Row 2（projection lag）→PENDING；stall→Row N=0→HOLD；reverse→Row 4（倒流）→REJECTED。禁止把两层叠层混淆（检测输出先于路由，路由不反向修改检测）。
 
 ### 9.6 review-gate（8/10 interchange 前置，8/9 固化）
 
