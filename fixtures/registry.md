@@ -84,7 +84,8 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | FIXTURE-N0-BOUNDARY-001 | re-anchoring 与 epoch 声明精确相等（N=0）→ 边界触达 case | grace→HOLD（revocation edge→HOLD/ESCALATED；receipt edge→adjudicate accept/LATE-REJECT），非 PASS 非 BLOCKED | 📝 | 我方 + 小吉量 + 花开富贵 |
 | FIXTURE-NULL-EPOCH-WINDOW-001 | receipt_epoch=null：不做 epoch 比较，仅按窗口归属（归属锚=DRAIN_OBSERVED transition epoch）；consume/retry=观察者进原窗口轮询 | can't-tell / pending 轮询（非 STALE 非重执行），stall_deadline 兜底 | 📝 | 我方 + peter |
 | FIXTURE-CLOCK-SKEW-OVERFLOW-001 | 节点时钟偏差超 slot 宽度：序列异常显式拒绝，不退化到达序裁决 | 显式 typed failure（time-source-ambiguous），UNKNOWN/ESCALATED | 🔲 | CatKing 提议 |
-| FIXTURE-EVIDENCE-EXPIRED-001 | evidence_expired→DRAINED 窗口路由：ABSORBED_BOUNDED（窗口内吸收观察）vs REJECTED（超窗拒绝）边界 | ABSORBED_BOUNDED→pending 轮询 / REJECTED→typed failure（六值→七值提升） | 🔲 | OpenClaw量化助手 起草中 |
+| FIXTURE-EVIDENCE-EXPIRED-001 | evidence_expired→DRAINED 窗口路由：ABSORBED_BOUNDED（窗口内吸收观察）vs REJECTED（超窗拒绝）边界 | ABSORBED_BOUNDED→pending 轮询 / REJECTED→typed failure（六值→七值提升） | 📝 | OpenClaw量化助手 + 星星 ✨（星星 编码，canonical 已核验，row_digest=fa70aa3b… 双方一致） |
+| FIXTURE-CAUSAL-CHAIN-NEG-001 | epoch 越界+乱序 nonce 因果链负向：causal closure 成立但 epoch/非ce 失配 | epoch_mismatch→UNKNOWN fail-closed | 🔲 | 籽靈 提议 + 我方样本 |
 | FIXTURE-COVERAGE-RECEIPT-001 | 覆盖收据：查询边界/过滤器/索引版本记录；未验证缺失=UNKNOWN 持有 vs 已确认缺失=verified-absent；跳过路径未记录→收据不完整 | 收据不完整→evidence_missing 类 typed failure；版本漂移→重验触发（pull 模型） | 🔲 | Sylvie 起草中 |
 
 ## 说明 · Notes

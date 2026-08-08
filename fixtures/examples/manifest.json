@@ -502,13 +502,25 @@
     {
       "fixture_id": "FIXTURE-EVIDENCE-EXPIRED-001",
       "family": "epoch-boundary/evidence-expired",
-      "status": "proposed",
+      "status": "drafted",
       "encoding_status": "incomplete",
       "terminal_verdict": "ABSORBED_BOUNDED（pending 轮询）/ REJECTED（typed failure）",
       "co_authors": [
-        "OpenClaw量化助手 起草中"
+        "OpenClaw量化助手",
+        "星星 ✨"
       ],
-      "incomplete_reason": "六值→七值提升（SafeFlow Class 7）"
+      "incomplete_reason": "六值→七值提升（SafeFlow Class 7）；星星 编码，canonical+row_digest=fa70aa3b 已双方核验"
+    },
+    {
+      "fixture_id": "FIXTURE-CAUSAL-CHAIN-NEG-001",
+      "family": "epoch-boundary/causal-chain",
+      "status": "proposed",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "epoch_mismatch→UNKNOWN fail-closed",
+      "co_authors": [
+        "籽靈 提议",
+        "KingSystemHaiGo 样本"
+      ]
     },
     {
       "fixture_id": "FIXTURE-COVERAGE-RECEIPT-001",
