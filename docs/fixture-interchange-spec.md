@@ -125,3 +125,50 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
 
 - 触发信息：escalation_trigger + scope_layer + authorized/actual_scope_hash（根因集四字段）。
 - 引用而非复制：escalated_from = 源 receipt digest；部分证据保留在 append-only 链上（每次探测留痕），escalation 行承载裁决 + 引用，不复制载荷（单一事实源）。
+
+## 9. v0.3 两字段分离与判定层（8/10 lock 前锁定，多实现确认）
+
+### 9.1 disposition 与 terminal_verdict 两字段分离（不塌缩 gate_outcome）
+
+- `disposition` = admission 层裁决（决定是否继续）：ADMITTED / NOT_ADMITTED / REVALIDATE / CONFLICT_HOLD / COMPENSATE。
+- `terminal_verdict` = 终态 5 值互换集（决定怎么记录）：PASS / INDET / FAIL / UNKNOWN / UNCLASSIFIED。
+- 两层语义不可混淆；与 `effect_binding_state`（OBSERVED_ACK / COMMITTED_OUTCOME / INDETERMINATE）正交叠加——drain disposition=ADMITTED 但 dual-phase reconciliation 未完成时 effect_binding_state=OBSERVED_ACK 而非 COMMITTED_OUTCOME。
+- disposition↔verdict 映射（草案，三方确认后 8/10 lock；mapping 缺失=行验证失败，不静默强转）：
+  | disposition | verdict | 语义 |
+  |---|---|---|
+  | ADMITTED | PASS | admission 通过+commit 授权 |
+  | NOT_ADMITTED | FAIL | 确定拒绝（契约违例/确定无效） |
+  | REVALIDATE | UNKNOWN（RECHECK_REQUIRED 一次性 probe） | fresh-snapshot 重验，probe 后二裁，不自动重试 |
+  | CONFLICT_HOLD | UNKNOWN（持有态） | fail-closed 不授权链打开+双保留，升级审计 |
+  | COMPENSATE | UNKNOWN/INDET（ESCALATED+compensation） | 升级+补偿路径，escalated_from 引用 |
+- 与 alias 表 v1.1.2 分层：alias=verdict 层 7→5 映射，本表=disposition→verdict 映射。
+
+### 9.2 边界语义（half-open + 双边缘标注）
+
+- epoch 窗口 = 半开区间 `[start_N, end_N)`，按 monotonic sequence 定界；fence epoch 本身 exclusive；墙钟（含校正后世界时间）不参与跨实现比较，序列分量是唯一权威。
+- **双边缘标注**（边界触达行必带）：revocation edge（授权面/下行）→ fence advance 阻断在途 commit（HOLD/ESCALATED，RACE-COMMIT-CAS-001 语义，旧工作不追溯定罪但需新 admission 新锚）；receipt edge（证据面/上行）→ grace→HOLD（close_arrival_boundary 先例：arrival==CLOSURE→grace→HOLD、>CLOSURE→LATE→REJECT），随后二分裁决。tie-break 相同、裁决路径按 edge 分叉。
+- **N=0（精确相等）**：归新 epoch（fencing exclusive），非 PASS 非 BLOCKED——边界触达→grace→HOLD 按 edge 分叉；N=0 行纳入 canonical fixture 集（EPOCH-TRANSITION 族）。
+- grace/HOLD 归入 reconciliation 双轴（无独立 grace 计时器——单一计时权威，防第三时钟漂移）。
+- 链位置=裁决结果（committed_chain_position，CAS 后写入）非排序输入；held receipt 在裁决点按 tie-break 落链，绝不回溯插入（到达位置只作证据）。
+
+### 9.3 ordering_constraint（v0.3 可选扩展）
+
+- `ordering_constraint = SHA-256(H(event_A) ‖ H(event_B) ‖ ordering_tag)`，event_A/B=re_anchoring 与 declaration 事件；**ordering_tag 显式**（方向令牌，如 FORWARD/REVERSE，verifier 校验 tag 与连接序一致——防单实现内反转自洽）。
+- chronological = 裁决序（epoch 单调序主+digest 次），非墙钟序。
+- tag=epoch-scoped：epoch 边界重置，跨 epoch 排序靠 fence transition receipt（epoch 链），tag 不跨 epoch 延续。
+- 可选字段：缺省=无显式 ordering constraint，回退场景语义；backward compatible v0.2。
+
+### 9.4 五元组 admission gate + disposition_reason bitfield
+
+- 五元组（前置门，非事后诊断）：①authorization scope（declared scope hash 覆盖检查，**调用时**非仅 admission 时）②execution epoch（monotonic sequence 比对）③intent（action+target+param-digest 比对——防『授权了但执行别的事』语义错位）④effect digest（与 effect_binding_state 联动）⑤durable receipt（存在+digest 链+失效谱系校验）。
+- 全匹配→terminal success；单点失配→不提交 effect+UNKNOWN/HOLD+保留可重放 reconciliation receipt；组合失败（partial persistence+stale epoch）单独覆盖。
+- disposition_reason = primary causal code + composite bitfield（多 reason 可叠加，非单选）。位定义（与二狗子 B.2 逐位对齐，8/10 lock call 前定稿）：
+  - bit:expired ↔ evidence_expired（六值→七值提升候选）
+  - bit:stale-epoch ↔ epoch_mismatch
+  - bit:intent-mismatch ↔ intent 维失配
+  - bit:delegation-widening ↔ SCOPE_WIDENING_AT_DELEGATION（委派期越权，修复点=委派链审计）
+  - bit:execution-constraint ↔ constraint_exceeded（执行期超约束，修复点=调用层能力重验证）
+  - bit:effect-unverifiable ↔ UNKNOWN 持有（证据缺口）
+  - bit:receipt-missing ↔ evidence_missing（无标注=missing 绝不暗示）
+  - bit:authority-unpinned ↔ FCM 双外部 digest 缺失→fail-closed UNKNOWN（HOLD 非 DENIED——硬边界才 DENIED、锚缺失=HOLD/UNKNOWN）
+  - bit:time-source-ambiguous ↔ 墙钟排除纪律（时钟偏差超界=显式 typed 拒绝，不退化到达序）
