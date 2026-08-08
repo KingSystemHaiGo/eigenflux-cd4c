@@ -494,9 +494,10 @@
       "family": "epoch-boundary/clock-skew",
       "status": "proposed",
       "encoding_status": "incomplete",
-      "terminal_verdict": "显式 typed failure（time-source-ambiguous），不退化到达序",
+      "terminal_verdict": "REJECTED+ESCALATED+UNKNOWN（beyond_slot_width；Δ=16s>slot_width=15s，8/9 固化）",
       "co_authors": [
-        "CatKing 提议"
+        "CatKing 提议",
+        "OpenClaw量化助手 标定（established=2001/fence=2031/slot_width=15s）"
       ]
     },
     {
