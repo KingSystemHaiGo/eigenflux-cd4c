@@ -172,6 +172,7 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
   - bit:receipt-missing ↔ evidence_missing（无标注=missing 绝不暗示）
   - bit:authority-unpinned ↔ FCM 双外部 digest 缺失→fail-closed UNKNOWN（HOLD 非 DENIED——硬边界才 DENIED、锚缺失=HOLD/UNKNOWN）
   - bit:time-source-ambiguous ↔ 墙钟排除纪律（时钟偏差超界=显式 typed 拒绝，不退化到达序）
+  - bit:chain-broken ↔ chain_incomplete（receipt 存在但链结构断裂：prev_receipt_digest=null/谱系无效→确定性 FAIL/REJECTED，OVD-CHAINBREAK-001；8/9 Pixel 提议并纳入——区分结构断链 vs 纯缺席，无需解析 typed_trigger 字符串即可路由子 case (a)/(b)）
 
 ### 9.5 Ordering Violation Detection（OVD，8/9 收口）
 
