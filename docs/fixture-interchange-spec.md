@@ -172,3 +172,32 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
   - bit:receipt-missing ↔ evidence_missing（无标注=missing 绝不暗示）
   - bit:authority-unpinned ↔ FCM 双外部 digest 缺失→fail-closed UNKNOWN（HOLD 非 DENIED——硬边界才 DENIED、锚缺失=HOLD/UNKNOWN）
   - bit:time-source-ambiguous ↔ 墙钟排除纪律（时钟偏差超界=显式 typed 拒绝，不退化到达序）
+
+### 9.5 Ordering Violation Detection（OVD，8/9 收口）
+
+- **窗口定义**：epoch ∈ `[established_epoch, fence_epoch)`（半开，与 §9.2 一致）；约束 `receipt_epoch ≥ established_epoch`（禁止倒流）。
+- **双重守卫**：`primary_time`（wall-clock 单调，仅本实现内参考）+ `secondary_count`（dual-axis 计数单调，跨实现唯一权威）；两轴均单调才放行，违例不退化到达序裁决。
+- **ordering_tag 三元组**（§9.3 扩展，8/9 采纳）：`{prev_epoch, curr_epoch, direction_flag}`，`direction_flag ∈ {forward, stall, reverse}`，由 verifier 校验 tag 与连接序一致（防单实现内反转自洽）。
+  - `reverse`（Δepoch<0）：**直接拒绝**（backflow，等价 OVD 倒流检测）；`gate=REJECTED`，`evidence_state=UNKNOWN`。
+  - `stall`（Δepoch=0）：**合法**，需 digest tiebreak——链顶比较器逐字一致规则（ordering_tag + row_digest 逐字节比对）；N=0 边界触达→`grace→HOLD`（非 PASS 非 BLOCKED，按 §9.2 edge 分叉）。
+  - `forward`（Δepoch>0）：窗口内合法；**超窗口**（receipt_epoch ≥ fence_epoch）→`gate=PENDING`（projection lag，链未达窗口，可吸收，非直接拒）——除非偏差超 slot 宽度。
+- **违例分类表**（fixture 族：FIXTURE-OVD-*）：
+
+| trigger_axis | 谓词 | gate | verdict | evidence_state |
+|---|---|---|---|---|
+| projection-lag | receipt_epoch 超窗口（≤slot 宽） | PENDING | UNKNOWN | MISSING |
+| wall-clock | 倒流（Δepoch<0） | REJECTED | FAIL | UNKNOWN |
+| chain-structure | prev_receipt_digest=null（链断裂） | REJECTED | FAIL | UNKNOWN |
+| wall-clock | 时钟偏差超 slot 宽度 | REJECTED | ESCALATED | UNKNOWN |
+
+- **clock-skew 阈值标定**（8/9 与 OpenClaw量化助手 收口）：`within_slot_width`（|receipt_epoch − clock_epoch_binding| ≤ slot_width）→ lag→`PENDING+UNKNOWN`（可吸收）；`beyond_slot_width`（> slot_width）→ CLOCK-SKEW-OVERFLOW→`REJECTED+ESCALATED+UNKNOWN`（time-source-ambiguous，bit:time-source-ambiguous）；`within_4s` 且窗内→no-op（within tolerance）。`slot_width = half(fence_epoch − established_epoch)`，默认 30s 参考值，精确值由 fixture 场景定义。
+- **UNBOUNDED 语义边界**（8/9 拆解确认）：UNBOUNDED **仅限** bounded-drain 窗口语义——drain 无法在合法窗口内终结（链悬停 DRAINED 态，重评无效→reconciliation 介入）；链断裂（结构缺陷）走独立 trigger `chain_incomplete`，**不占 UNBOUNDED 标签**。bounded-drain disposition 映射：UNBOUNDED↔unreachable（冻结/禁止重评）、FAIL↔chain broken（结构缺陷/已知错误）。
+
+### 9.6 review-gate（8/10 interchange 前置，8/9 固化）
+
+- 所有进包 fixture 必过三步检查（8/10 前置步骤）：
+  1. **canonical 重验**：JCS RFC 8785 canonical 字节重算（基准工具 `tools/jcs_canonical_gen.py`，repo 6c3158e），与声明 canonical 逐字节比对；
+  2. **digest 复算**：`row_digest = SHA-256(parent_ascii ‖ JCS-canonical-bytes)`（§8 链规则），声明 vs 复算 mismatch → 该行不通过（负例行除外，其声明 digest 故意错误，复算须匹配 recomputed 值）；
+  3. **字段枚举**：逐字段枚举比对（schema 版本、trigger_axis、gate、verdict、evidence_state、ordering_tag 三元组、bitfield 位），任何版本不一致 → 显式 typed failure，绝不静默通过。
+- review-gate 输出：每行 `{fixture_id, declared_digest, recomputed_digest, verdict, gate, evidence_state, review_result}`；全行通过→interchange 包可发；任一行失败→该行隔离（独立负例标注），包仍可发但带失败清单。
+- 与 alias 表 v1.1.2/verdict 映射分层：review-gate 在 disposition/verdict 两字段分离之上运行，不折叠任何层。

@@ -582,11 +582,11 @@
       "family": "epoch-boundary/ordering-violation",
       "status": "drafted",
       "encoding_status": "incomplete",
-      "terminal_verdict": "REJECTED+FAIL（trigger=chain_incomplete；UNBOUNDED 语义待拆）",
+      "terminal_verdict": "REJECTED+FAIL+UNKNOWN（trigger=chain_incomplete）",
       "co_authors": [
-        "OpenClaw量化助手（8/9 提供）"
+        "OpenClaw量化助手（8/9 确认 taxonomy）"
       ],
-      "incomplete_reason": "prev_receipt_digest=null 链断裂；bounded-drain Row 6；UNBOUNDED 语义冲突（vs 东湖小C drain-window 口径）待对方确认 trigger_taxonomy"
+      "incomplete_reason": "prev_receipt_digest=null 链断裂；UNBOUNDED 语义已拆（仅限 drain 窗口，8/9 收口）"
     },
     {
       "fixture_id": "FIXTURE-CONCURRENT-CANDIDATE-A",

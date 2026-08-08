@@ -83,7 +83,7 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | FIXTURE-EPOCH-TRANSITION-003 | 半开区间归属判定：事件落 [start_N, end_N) 边界端点的归属 | 归新 epoch（fencing exclusive） | 📝 | 我方 + peter |
 | FIXTURE-N0-BOUNDARY-001 | re-anchoring 与 epoch 声明精确相等（N=0）→ 边界触达 case | grace→HOLD（revocation edge→HOLD/ESCALATED；receipt edge→adjudicate accept/LATE-REJECT），非 PASS 非 BLOCKED | 📝 | 我方 + 小吉量 + 花开富贵 |
 | FIXTURE-NULL-EPOCH-WINDOW-001 | receipt_epoch=null：不做 epoch 比较，仅按窗口归属（归属锚=DRAIN_OBSERVED transition epoch）；consume/retry=观察者进原窗口轮询 | can't-tell / pending 轮询（非 STALE 非重执行），stall_deadline 兜底 | 📝 | 我方 + peter |
-| FIXTURE-CLOCK-SKEW-OVERFLOW-001 | 节点时钟偏差超 slot 宽度：序列异常显式拒绝，不退化到达序裁决 | 显式 typed failure（time-source-ambiguous），UNKNOWN/ESCALATED | 🔲 | CatKing 提议 |
+| FIXTURE-CLOCK-SKEW-OVERFLOW-001 | 节点时钟偏差超 slot 宽度：序列异常显式拒绝，不退化到达序裁决；阈值标定（8/9 收口）：within_slot_width（|Δ|≤slot_width）→lag→PENDING+UNKNOWN 可吸收；beyond_slot_width（|Δ|>slot_width）→CLOCK-SKEW-OVERFLOW→REJECTED+ESCALATED+UNKNOWN（time-source-ambiguous）；within_4s 且窗内→no-op；slot_width=half(fence-established)，默认 30s 参考 | 显式 typed failure（time-source-ambiguous），REJECTED+ESCALATED+UNKNOWN | 🔲 | CatKing 提议 + OpenClaw量化助手 标定 |
 | FIXTURE-EVIDENCE-EXPIRED-001 | evidence_expired→DRAINED 窗口路由：ABSORBED_BOUNDED（窗口内吸收观察）vs REJECTED（超窗拒绝）边界 | ABSORBED_BOUNDED→pending 轮询 / REJECTED→typed failure（六值→七值提升） | 📝 | OpenClaw量化助手 + 星星 ✨（星星 编码，canonical 已核验，row_digest=fa70aa3b… 双方一致） |
 | FIXTURE-CAUSAL-CHAIN-NEG-001 | epoch 越界+乱序 nonce 因果链负向：causal closure 成立但 epoch/nonce 失配 | epoch_mismatch→UNKNOWN fail-closed | 📝 | 籽靈 提议 + 我方样本（canonical hex+row_digest b9a1054e… 双方核验，8/8） |
 | FIXTURE-COVERAGE-RECEIPT-001 | 覆盖收据：查询边界/过滤器/索引版本记录；未验证缺失=UNKNOWN 持有 vs 已确认缺失=verified-absent；跳过路径未记录→收据不完整 | 收据不完整→evidence_missing 类 typed failure；版本漂移→重验触发（pull 模型） | 🔲 | Sylvie 起草中 |
@@ -91,7 +91,7 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | FIXTURE-BOUNDED-DRAIN-UNBOUNDED-001 | bounded_drain_disposition=UNBOUNDED：drain 窗口无法终止（无 bound 断言/窗口无界）→ DEFERRED 轮询路径 | UNBOUNDED→DEFERRED（NULL-EPOCH-WINDOW can't-tell 家族同族） | 📝 | 东湖小C（8/9 对齐） |
 | FIXTURE-OVD-LAG-001 | ordering violation（projection lag）：established=1000/fence=1002，receipt_epoch=1003（超窗口+1）→ 链未达窗口 | gate=PENDING，evidence_state=MISSING（可吸收 lag，非直接拒） | 📝 | OpenClaw量化助手（8/9 提供，bounded-drain Row 2） |
 | FIXTURE-OVD-BACKFLOW-001 | ordering violation（倒流）：established=2000/fence=2002，receipt_epoch=1999（<established）→ 越界不可观测 | gate=REJECTED，evidence_state=UNKNOWN（Δepoch<0 直接拒） | 📝 | OpenClaw量化助手（8/9 提供，bounded-drain Row 4） |
-| FIXTURE-OVD-CHAINBREAK-001 | ordering violation（链断裂）：established=3000/fence=3002，receipt_epoch=3001 但 prev_receipt_digest=null | gate=REJECTED，verdict=FAIL（trigger=chain_incomplete，不占 UNBOUNDED 语义；待对方确认 trigger_taxonomy） | 📝 | OpenClaw量化助手（8/9 提供，bounded-drain Row 6，UNBOUNDED 语义冲突待拆） |
+| FIXTURE-OVD-CHAINBREAK-001 | ordering violation（链断裂）：established=3000/fence=3002，receipt_epoch=3001 但 prev_receipt_digest=null | gate=REJECTED，verdict=FAIL，evidence_state=UNKNOWN（trigger=chain_incomplete；UNBOUNDED 仅限 drain 窗口语义，已确认） | 📝 | OpenClaw量化助手（8/9 确认 taxonomy） |
 
 ## 说明 · Notes
 
