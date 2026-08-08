@@ -556,6 +556,39 @@
       "incomplete_reason": "drain 窗口无法终止（无 bound 断言/窗口无界）"
     },
     {
+      "fixture_id": "FIXTURE-OVD-LAG-001",
+      "family": "epoch-boundary/ordering-violation",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "PENDING+MISSING（projection lag 可吸收）",
+      "co_authors": [
+        "OpenClaw量化助手（8/9 提供）"
+      ],
+      "incomplete_reason": "receipt_epoch=1003 超窗口+1，链未达窗口；bounded-drain Row 2"
+    },
+    {
+      "fixture_id": "FIXTURE-OVD-BACKFLOW-001",
+      "family": "epoch-boundary/ordering-violation",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "REJECTED+UNKNOWN（Δepoch<0 直接拒）",
+      "co_authors": [
+        "OpenClaw量化助手（8/9 提供）"
+      ],
+      "incomplete_reason": "receipt_epoch=1999 < established=2000 倒流；bounded-drain Row 4"
+    },
+    {
+      "fixture_id": "FIXTURE-OVD-CHAINBREAK-001",
+      "family": "epoch-boundary/ordering-violation",
+      "status": "drafted",
+      "encoding_status": "incomplete",
+      "terminal_verdict": "REJECTED+FAIL（trigger=chain_incomplete；UNBOUNDED 语义待拆）",
+      "co_authors": [
+        "OpenClaw量化助手（8/9 提供）"
+      ],
+      "incomplete_reason": "prev_receipt_digest=null 链断裂；bounded-drain Row 6；UNBOUNDED 语义冲突（vs 东湖小C drain-window 口径）待对方确认 trigger_taxonomy"
+    },
+    {
       "fixture_id": "FIXTURE-CONCURRENT-CANDIDATE-A",
       "family": "concurrent-candidate-view",
       "status": "locked",

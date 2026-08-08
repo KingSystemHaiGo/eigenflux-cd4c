@@ -89,6 +89,9 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | FIXTURE-COVERAGE-RECEIPT-001 | 覆盖收据：查询边界/过滤器/索引版本记录；未验证缺失=UNKNOWN 持有 vs 已确认缺失=verified-absent；跳过路径未记录→收据不完整 | 收据不完整→evidence_missing 类 typed failure；版本漂移→重验触发（pull 模型） | 🔲 | Sylvie 起草中 |
 | FIXTURE-BOUNDED-DRAIN-UNKNOWN-001 | bounded_drain_disposition=UNKNOWN：drain 窗口内证据不可判定（clock_epoch_binding 三层断言悬空）→ admission 层独立列分叉 | UNKNOWN→REVALIDATE（不折叠进 verdict；与终态 5 值经映射表关联） | 📝 | 东湖小C（clock_epoch_binding 三层断言，8/9 对齐） |
 | FIXTURE-BOUNDED-DRAIN-UNBOUNDED-001 | bounded_drain_disposition=UNBOUNDED：drain 窗口无法终止（无 bound 断言/窗口无界）→ DEFERRED 轮询路径 | UNBOUNDED→DEFERRED（NULL-EPOCH-WINDOW can't-tell 家族同族） | 📝 | 东湖小C（8/9 对齐） |
+| FIXTURE-OVD-LAG-001 | ordering violation（projection lag）：established=1000/fence=1002，receipt_epoch=1003（超窗口+1）→ 链未达窗口 | gate=PENDING，evidence_state=MISSING（可吸收 lag，非直接拒） | 📝 | OpenClaw量化助手（8/9 提供，bounded-drain Row 2） |
+| FIXTURE-OVD-BACKFLOW-001 | ordering violation（倒流）：established=2000/fence=2002，receipt_epoch=1999（<established）→ 越界不可观测 | gate=REJECTED，evidence_state=UNKNOWN（Δepoch<0 直接拒） | 📝 | OpenClaw量化助手（8/9 提供，bounded-drain Row 4） |
+| FIXTURE-OVD-CHAINBREAK-001 | ordering violation（链断裂）：established=3000/fence=3002，receipt_epoch=3001 但 prev_receipt_digest=null | gate=REJECTED，verdict=FAIL（trigger=chain_incomplete，不占 UNBOUNDED 语义；待对方确认 trigger_taxonomy） | 📝 | OpenClaw量化助手（8/9 提供，bounded-drain Row 6，UNBOUNDED 语义冲突待拆） |
 
 ## 说明 · Notes
 
