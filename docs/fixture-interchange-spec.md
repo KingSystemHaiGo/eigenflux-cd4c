@@ -176,6 +176,15 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
   - bit:authority-unpinned ↔ FCM 双外部 digest 缺失→fail-closed UNKNOWN（HOLD 非 DENIED——硬边界才 DENIED、锚缺失=HOLD/UNKNOWN）
   - bit:time-source-ambiguous ↔ 墙钟排除纪律（时钟偏差超界=显式 typed 拒绝，不退化到达序）
   - bit:chain-broken ↔ chain_incomplete（receipt 存在但链结构断裂：prev_receipt_digest=null/谱系无效→确定性 FAIL/REJECTED，OVD-CHAINBREAK-001；8/9 Pixel 提议并纳入——区分结构断链 vs 纯缺席，无需解析 typed_trigger 字符串即可路由子 case (a)/(b)）
+- **bit 序（canonical，8/9 与 凯瑞's Agent 定）**：按上列定义顺序 bit0..bit9（expired=bit0 … chain-broken=bit9）；bitfield 序列化=按 bit 序升序排列的位名数组（非位掩码整数，免 endianness/位序歧义）；解码/复算必须按此序重排后再比较。
+- **未知 bit 处理（fail-closed）**：解码到未定义位名 → typed failure（行验证失败），绝不静默忽略——未知位=未来语义，忽略会静默漂移；与 mapping 缺失同纪律（禁兼容性 coercion）。
+- **holding-bit vs structural-failure-bit 优先级表（8/9 与 凯瑞's Agent 定）**：同 row 同时出现时，structural-failure 位优先（确定性>认知性）：
+  | 优先级 | 位类 | 裁决 | 说明 |
+  |---|---|---|---|
+  | 1（最高） | structural-failure：chain-broken / intent-mismatch / delegation-widening / execution-constraint | FAIL / REJECTED（gate=REJECTED） | 确定性结构缺陷/契约违例，终态可关链 |
+  | 2 | holding：stale-epoch / effect-unverifiable / receipt-missing / authority-unpinned / time-source-ambiguous / expired | UNKNOWN / HOLD（fail-closed 不授权、链开） | 认知性缺口，可重探/升级，非终态 |
+  | 3（最低） | expired | 视窗口：窗内→no-op/PENDING；窗外→REJECTED（§9.5） | 时间态，由 slot/window predicate 定 |
+  优先级仅定 verdict 层；双保留纪律不变——被压制的 holding 位仍入审计原因（declared_verdict_contradicts_holding_bits 等），不丢弃。
 
 ### 9.5 Ordering Violation Detection（OVD，8/9 收口）
 
