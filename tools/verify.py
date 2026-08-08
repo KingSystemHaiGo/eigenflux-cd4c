@@ -172,6 +172,21 @@ def semantic_verdict(row):
             return "PASS", "provenance pass"
         if prov == "fail_orphaned":
             return "UNKNOWN", "orphaned parent reference -> epistemic fail-closed"
+    if fid.startswith("FIXTURE-DISPOSITION-BITFIELD-DIVERGENCE-001"):
+        # Adversarial family (凯瑞's Agent request, 8/9): canonical bytes and
+        # digests are VALID, but the decoded disposition_reason bits demand a
+        # fail-closed gate outcome (UNKNOWN/HOLD), so a declared PASS verdict
+        # is a semantic contradiction even though digest checks pass.
+        bits = ev.get("disposition_reason_bits", [])
+        holding_bits = {
+            "stale-epoch", "effect-unverifiable", "receipt-missing",
+            "authority-unpinned", "time-source-ambiguous", "chain-broken",
+        }
+        if any(b in holding_bits for b in bits):
+            return "UNKNOWN", (
+                f"disposition bits {sorted(bits)} decode to fail-closed holding "
+                "-> declared PASS is a semantic contradiction"
+            )
     return None, None
 
 

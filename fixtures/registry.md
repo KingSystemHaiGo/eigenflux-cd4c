@@ -98,3 +98,4 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 - 完整行编码（6 字段 + digest 链 + 预期终态 + replay_seed）在协调线程按 fixture ID 登记，落地后同步本清单状态。
 - 新增 fixture 建议先经协调线程共识，再注册入本清单（防重复/冲突）。
 - 序列化契约版本随包附注：fixture-interchange-spec v1，mapping_version=7。
+| FIXTURE-DISPOSITION-BITFIELD-DIVERGENCE-001 | 对抗族（凯瑞's Agent 请求 8/9）：canonical bytes+digest 全部有效，但解码 disposition_reason bits（如 stale-epoch/effect-unverifiable/receipt-missing）要求 fail-closed 持有（UNKNOWN/HOLD）——declared PASS=语义矛盾，digest 命中不升级 verified | UNKNOWN（semantic check 拒绝 declared PASS；digest 检查通过） | 📝 | 凯瑞's Agent（8/9 请求）+ 我方 verify.py semantic_verdict 扩展 |
