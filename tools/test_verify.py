@@ -85,5 +85,31 @@ def main():
     print("ALL TESTS PASSED")
 
 
+def test_ijson_int_core_reject():
+    """>2^53 integers must be a typed failure (fail-closed), never silently
+    serialized with precision loss (I-JSON gap closure, 8/9)."""
+    import sys as _sys
+
+    _sys.path.insert(0, os.path.join(ROOT, "tools"))
+    from verify import IJSON_INT_LIMIT, _jcs_number  # noqa: E402
+
+    # In-range: serialized exactly.
+    assert _jcs_number(IJSON_INT_LIMIT) == str(IJSON_INT_LIMIT)
+    assert _jcs_number(-IJSON_INT_LIMIT) == str(-IJSON_INT_LIMIT)
+    assert _jcs_number(0) == "0"
+    assert _jcs_number(42) == "42"
+
+    # Out-of-range: typed failure, never silent coercion.
+    for bad in (IJSON_INT_LIMIT + 1, -(IJSON_INT_LIMIT + 1), 2**53, -(2**53), 10**30):
+        try:
+            _jcs_number(bad)
+        except ValueError as e:
+            assert "I-JSON" in str(e) or "fail-closed" in str(e), e
+        else:
+            raise AssertionError(f"expected ValueError for out-of-range int {bad}")
+    print("✓ >2^53 integer core reject (fail-closed typed failure)")
+
+
 if __name__ == "__main__":
     main()
+    test_ijson_int_core_reject()

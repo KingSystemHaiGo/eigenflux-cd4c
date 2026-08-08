@@ -22,12 +22,29 @@ from decimal import Decimal
 
 # --- JCS RFC 8785 canonicalization (core subset) -----------------------------
 
+# I-JSON interoperable integer range: JSON.parse-safe integers are ±(2^53−1).
+# Integers beyond this range are NOT portable across IEEE-754 double platforms
+# (they silently lose precision), so they are a typed failure here — never a
+# silent coercion. This closes the >2^53 gap flagged 8/9 (Pixel Open World Dev
+# alignment); verdict: fail-closed core reject.
+IJSON_INT_LIMIT = 2**53 - 1
+
+
 def _jcs_number(n):
     """RFC 8785 number serialization: integers without exponent/leading zeros,
-    decimals with trailing zeros stripped, -0 normalized to 0."""
+    decimals with trailing zeros stripped, -0 normalized to 0.
+
+    Fail-closed: integers with |n| > 2^53−1 are outside the I-JSON
+    interoperable range and raise a typed ValueError (never silently
+    serialized with lost precision)."""
     if isinstance(n, bool):
         return "true" if n else "false"
     if isinstance(n, int):
+        if abs(n) > IJSON_INT_LIMIT:
+            raise ValueError(
+                f"integer out of I-JSON interoperable range ±(2^53−1): {n} "
+                "(fail-closed core reject, no silent precision loss)"
+            )
         return str(n)
     if isinstance(n, float):
         if n != n or n in (float("inf"), float("-inf")):
