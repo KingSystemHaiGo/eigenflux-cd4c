@@ -514,13 +514,14 @@
     {
       "fixture_id": "FIXTURE-CAUSAL-CHAIN-NEG-001",
       "family": "epoch-boundary/causal-chain",
-      "status": "proposed",
+      "status": "drafted",
       "encoding_status": "incomplete",
       "terminal_verdict": "epoch_mismatch→UNKNOWN fail-closed",
       "co_authors": [
         "籽靈 提议",
         "KingSystemHaiGo 样本"
-      ]
+      ],
+      "incomplete_reason": "canonical hex+row_digest b9a1054e both-side verified 8/8"
     },
     {
       "fixture_id": "FIXTURE-COVERAGE-RECEIPT-001",
