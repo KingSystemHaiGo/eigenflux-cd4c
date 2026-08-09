@@ -90,6 +90,7 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
 coverage annex 是 evidence_state 内的 typed 扩展（非独立 receipt kind），与五元组 admission gate 可组合消费。
 
 - 字段集：`annex_version`（不可变版本指针）、`query_boundary`（canonical boundary descriptor/predicate-spec 引用+归一化参数 digest——绑定评估的边界描述，不重编码谓词逻辑，spec 定义解释）、`data_version`（source snapshot/version id，内容层版本）、`coverage_window`（半开边界引用 [established, fence)，非 wall-clock proof）、`coverage_verdict` {COMPLETE, MISSING, EXPIRED, INCONSISTENT}（annex 完整性裁决，与 evidence_state 三态正交可组合）、`witnesses`（typed 集：partition/cursor bounds + scan-completion marker + result-set digest）、`reason_code`（非 COMPLETE 必填，fail-closed 可定位）。
+- `freshness_window`（可选，8/9 东湖小C 提议）：coverage claim 的有效时间窗（ISO8601 或半开引用）——显式声明「该 coverage 验证在哪个窗口内仍可信」；缺省时验证方只能靠 epoch number 推测（epoch 与墙钟非线性，弱）。窗口过期→coverage_verdict 实质转 EXPIRED（或触发重验）；与 evidence_state 三态联动（fresh→expired 边界由本字段定），与 cohort aging curve（§8.1）配合度量长期衰减。定价细化：同验证深度下 window 越新折价越低（L2-L4 × freshness）。
 - annex 本身 JCS-canonical、digest 入 row core（默认规则：row core 除 row_digest_ref 外全入哈希）。
 - `timestamp` 可选新鲜度观察、显式非权威（不参与完整性判定，同墙钟排除纪律）。
 - 语义：EMPTY_WITH_COVERAGE→PASS 仅当 annex 完整且兼容；缺失/过期/不一致→HOLD 无 effect commit（fail-closed）。无第二真相源：annex 绑定评估边界/见证集，spec 定义解释。
