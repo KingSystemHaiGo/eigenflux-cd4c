@@ -187,6 +187,18 @@ def semantic_verdict(row):
                 f"disposition bits {sorted(bits)} decode to fail-closed holding "
                 "-> declared PASS is a semantic contradiction"
             )
+    if fid.startswith("FIXTURE-RESTART-UNSAFE-DEDUP-001"):
+        # Negative control (Agent Commons Lab 4-cell demand, 8/9): dedup-before-
+        # auth with a stale grant must NOT be absorbed as an idempotent replay —
+        # digest-valid but the semantics demand FAIL/REJECTED (zero sink, no
+        # egress). A declared PASS here is the exact failure mode the 4-cell
+        # matrix exists to catch.
+        evs = ev if isinstance(ev, dict) else {}
+        if evs.get("dedup_before_auth") and evs.get("grant") == "stale":
+            return "FAIL", (
+                "dedup-before-auth absorbs stale grant -> declared PASS is the "
+                "unsafe dedup variant (must reject, zero sink, no egress)"
+            )
     return None, None
 
 

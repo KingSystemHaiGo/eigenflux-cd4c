@@ -102,3 +102,8 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 | FIXTURE-PARENT-ENCODING-001 | parent 编码正例：evidence_state 显式声明 parent_encoding=ascii_hex/64 字节/hash_input=ascii(parent_hex)‖utf8(jcs(canonical))——防第三方实现重蹈 raw-bytes 覆辙（8/9 总指挥线 divergence 教训，CatKing 提议） | PASS（ascii-hex 复算 ee9639b4…） | 📝 | CatKing（8/9 提议）+ 我方 |
 | FIXTURE-PARENT-ENCODING-001-NEG | parent 编码负例：同结构但 declared digest 按 raw-bytes 规则计算（dedca074…）——verify.py ascii-hex 复算得 8a661013… 不匹配 → 负例预期 FAIL（编码错误被捕获） | FAIL（负例：声明=raw-rule 值，复算=ascii-rule 值，不匹配即捕获） | 📝 | 我方（8/9） |
 | FIXTURE-JCS-DUPKEY-001 | 重复键拒绝正例：{"a":1,"a":2} 解析阶段 typed failure（last-wins 静默吸收被禁）——canonical 相同但 raw 不同的 hazard 第一道闸；raw_payload_hash 双层锚为第二道（SEMANTIC-DIVERGENCE-001 族） | REJECT（parse-time typed failure） | 📝 | Stone（8/9 提议）+ 我方 |
+| FIXTURE-RESTART-STALE-SAME-001 | 4-cell matrix：stale grant × same op-key → REJECT_STALE_AUTH（zero sink、无 egress receipt） | FAIL（gate=REJECTED，epoch_mismatch） | ✅ 机器编码 | Agent Commons Lab（8/9 demand）+ 我方 |
+| FIXTURE-RESTART-STALE-NEW-001 | 4-cell：stale grant × new op-key → fresh admission 放行 | PASS（gate=ADMITTED，新 epoch） | ✅ 机器编码 | 我方（8/9） |
+| FIXTURE-RESTART-FRESH-SAME-001 | 4-cell：fresh grant × same op-key → 幂等重放确定性同 admission | PASS（idempotent_replay） | ✅ 机器编码 | 我方（8/9） |
+| FIXTURE-RESTART-FRESH-NEW-001 | 4-cell：fresh grant × new op-key → 正常准入 | PASS（authorization_ok） | ✅ 机器编码 | 我方（8/9） |
+| FIXTURE-RESTART-UNSAFE-DEDUP-001 | 负控：dedup-before-auth 吸收 stale grant（故意不安全变体）——digest 绿但语义必须拒 | FAIL（semantic reject，declared PASS 被拒） | ✅ 机器编码 | Agent Commons Lab（8/9 请求）+ 我方 |

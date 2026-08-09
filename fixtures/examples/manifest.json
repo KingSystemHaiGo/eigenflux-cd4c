@@ -102,6 +102,136 @@
       },
       "replay_seed": "prov001:delegation:containment_pass_provenance_fail_orphaned",
       "row_digest_ref": "9fee2c097dd03d29a38a8c73cc1ca48fd9c9d360fec4ea3e9f20994a3e03aadf"
+    },
+    {
+      "fixture_id": "FIXTURE-RESTART-STALE-SAME-001",
+      "terminal_verdict": "FAIL",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_3002",
+        "stage": "restart_recovery",
+        "grant_epoch": "epoch_2000",
+        "op_key_epoch": "epoch_2000"
+      },
+      "typed_trigger": "epoch_mismatch",
+      "evidence_state": {
+        "basis": "monotonic_chain",
+        "state": "unknown",
+        "grant": "stale",
+        "op_key": "same",
+        "sink_attempts": 0,
+        "egress_receipt": "none"
+      },
+      "replay_seed": "restart_stale_same:reject:zero_sink",
+      "gate": "REJECTED",
+      "row_digest_ref": "c03ac382255ff48a51d101e5caa6b9de237899e5d3cd54ed12ea4b898fd331ad"
+    },
+    {
+      "fixture_id": "FIXTURE-RESTART-STALE-NEW-001",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_3002",
+        "stage": "restart_recovery",
+        "grant_epoch": "epoch_2000",
+        "op_key_epoch": "epoch_3002"
+      },
+      "typed_trigger": "authorization_ok",
+      "evidence_state": {
+        "basis": "monotonic_chain",
+        "state": "fresh",
+        "grant": "stale",
+        "op_key": "new",
+        "fresh_admission": true
+      },
+      "replay_seed": "restart_stale_new:admit:fresh_epoch",
+      "gate": "ADMITTED",
+      "row_digest_ref": "34cfdc736bf2f48492f0591fa5fd76bfd4b8b1293b79991a6713121ecc8241f3"
+    },
+    {
+      "fixture_id": "FIXTURE-RESTART-FRESH-SAME-001",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_3002",
+        "stage": "restart_recovery",
+        "grant_epoch": "epoch_3002",
+        "op_key_epoch": "epoch_3002"
+      },
+      "typed_trigger": "idempotent_replay",
+      "evidence_state": {
+        "basis": "monotonic_chain",
+        "state": "fresh",
+        "grant": "fresh",
+        "op_key": "same",
+        "replay": "deterministic_same_admission"
+      },
+      "replay_seed": "restart_fresh_same:replay:same_admission_identity",
+      "gate": "ADMITTED",
+      "row_digest_ref": "b25c54f492dc11c9068b37df28f7f457827ee6dbbbf9896a630c710111d42e58"
+    },
+    {
+      "fixture_id": "FIXTURE-RESTART-FRESH-NEW-001",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_3002",
+        "stage": "restart_recovery",
+        "grant_epoch": "epoch_3002",
+        "op_key_epoch": "epoch_3002"
+      },
+      "typed_trigger": "authorization_ok",
+      "evidence_state": {
+        "basis": "monotonic_chain",
+        "state": "fresh",
+        "grant": "fresh",
+        "op_key": "new"
+      },
+      "replay_seed": "restart_fresh_new:admit:normal",
+      "gate": "ADMITTED",
+      "row_digest_ref": "ca6862b4460e25bc46fe8741dd3580892a8c268da5481492b0e896ce56cd67ce"
+    },
+    {
+      "fixture_id": "FIXTURE-OVD-BACKFLOW-001",
+      "terminal_verdict": "FAIL",
+      "mapping_version": 7,
+      "epoch_context": {
+        "established_epoch": "epoch_2000",
+        "fence_epoch": "epoch_2002",
+        "receipt_epoch": "epoch_1999",
+        "stage": "ordering_violation"
+      },
+      "typed_trigger": "epoch_mismatch",
+      "evidence_state": {
+        "basis": "monotonic_chain",
+        "state": "unknown"
+      },
+      "replay_seed": "ovd_backflow001:gate:rejected",
+      "gate": "REJECTED",
+      "row_digest_ref": "2545a909ec7aa3c1d911bb2e874178d7681361fbf52f5f8320398793d40be123"
+    },
+    {
+      "fixture_id": "FIXTURE-RESTART-UNSAFE-DEDUP-001",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "epoch_3002",
+        "stage": "restart_recovery",
+        "grant_epoch": "epoch_2000",
+        "op_key_epoch": "epoch_2000"
+      },
+      "typed_trigger": "idempotent_replay",
+      "evidence_state": {
+        "basis": "monotonic_chain",
+        "state": "unknown",
+        "grant": "stale",
+        "op_key": "same",
+        "dedup_before_auth": true,
+        "sink_attempts": 0
+      },
+      "replay_seed": "restart_unsafe_dedup:semantic_reject",
+      "gate": "REJECTED",
+      "row_digest_ref": "4e96000db659f5814c678eeb9f002c31153084bf0ebe2e65f848426ae8ba0a0b"
     }
   ],
   "concurrent_candidates": [
