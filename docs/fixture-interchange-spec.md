@@ -10,6 +10,7 @@
 - Canonical 形式：**纯 JCS RFC 8785**（canonicalizer_version=1.0）——键按 UTF-16 code units 排序、RFC 8785 字符串转义/数字语法、无多余空白。**RFC 8785 不强制 NFC**；NFC preprocessing（Unicode UAX#15）为显式可选扩展（opt-in 启用，非 NFC 输入在预处理阶段 typed failure 而非静默归一），默认 canonical 不含归一化——跨实现字节可比不依赖任何归一化。
   - 任意发射器产出同逻辑 JSON = 同字节（字段顺序不影响 digest）。
   - JCS 规范化的是**序列化**（键序/数字语法/转义），**不是字符串值**——异 trigger 名产生异 canonical 字节 → digest 失配即检出。
+  - ⚠️ **重复键拒绝（8/9 Stone 提议采纳）**：解析阶段拒绝重复键（typed failure），绝不 last-wins 静默吸收——两个仅重复键不同的对象 canonical 相同但语义不同（raw 不同），last-wins 解析会把该 hazard 静默折叠；parse-time reject 使 canonicalizer 层 fail-closed。与 raw_payload_hash 双层锚叠加：raw 不同仍会被双层锚检出（FIXTURE-JCS-SEMANTIC-DIVERGENCE-001 族），reject 是第一道闸。
 
 ## 2. 行 digest 链
 
