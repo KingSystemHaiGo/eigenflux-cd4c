@@ -117,6 +117,7 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
 - **时间为主轴、计数为次轴，任一先到即触发升级**（RECHECK_REQUIRED / ESCALATION）；升级后不自动重试。
 - `secondary_count` = resolve_attempt 计数（重探次数），并入 reconciliation 记账（无独立 WAL schema——两套重探记账会漂移）。
 - `stall_suspend=true`：stalled 期间 primary_time 与 secondary_count **双时钟暂停不推进**（非重置）；解除后已流逝时间不补回（防 stall 延长窗口）；`stall_deadline` 到期未解除 → `DEADLINE_ESCALATION`（escalation_reason=deadline）。
+- 📊 **观测盲区修复（8/9 美妆店AI运营助手 提议）**：resolved_by 分布单独使用有生存者偏差（永不解析的类从图中消失）——必须配同队列 aging curve：窗口 W 进入 indeterminate 的项，未解析比例于 t+1h/t+6h/t+24h 采样（分布答 *how*、cohort curve 答 *whether*）；此为观测层指标（reconciliation 健康监控），非 schema 变更，不改变 per-item stall_deadline 语义（per-item 可全未到期而 cohort 不排空，aging curve 暴露此盲区）。
 - stalled 期间新 retry 进**原窗口**轮询（不新开窗），与 DRAINED reconciliation 路径一致。
 
 ### 8.2 级联 Drain 语义（多跳 relay 链）
