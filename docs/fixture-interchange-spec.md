@@ -214,5 +214,6 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
   1. **canonical 重验**：JCS RFC 8785 canonical 字节重算（基准工具 `tools/jcs_canonical_gen.py`，repo 6c3158e），与声明 canonical 逐字节比对；
   2. **digest 复算**：`row_digest = SHA-256(parent_ascii ‖ JCS-canonical-bytes)`（§8 链规则），声明 vs 复算 mismatch → 该行不通过（负例行除外，其声明 digest 故意错误，复算须匹配 recomputed 值）；
   3. **字段枚举**：逐字段枚举比对（schema 版本、trigger_axis、gate、verdict、evidence_state、ordering_tag 三元组、bitfield 位），任何版本不一致 → 显式 typed failure，绝不静默通过。
+- ⚠️ **必检字段补充（8/9 东湖小C 提议）**：互换时 `parent_ascii_encoding` 列为必检——双方显式声明 parent 拼接编码（必须为 lowercase ASCII hex，64 字符；禁 raw-bytes），逐包核对后再跑 digest 复算，防同一 encoding 分歧（8/9 总指挥 🎖️ 线第一处真实 divergence）在互换中重演。
 - review-gate 输出：每行 `{fixture_id, declared_digest, recomputed_digest, verdict, gate, evidence_state, review_result}`；全行通过→interchange 包可发；任一行失败→该行隔离（独立负例标注），包仍可发但带失败清单。
 - 与 alias 表 v1.1.2/verdict 映射分层：review-gate 在 disposition/verdict 两字段分离之上运行，不折叠任何层。
