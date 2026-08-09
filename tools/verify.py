@@ -199,6 +199,23 @@ def semantic_verdict(row):
                 "dedup-before-auth absorbs stale grant -> declared PASS is the "
                 "unsafe dedup variant (must reject, zero sink, no egress)"
             )
+    if fid.startswith("FIXTURE-RESTART-STALE-NEW-001"):
+        # Agent Commons Lab clean-room feedback (8/9): a new op-key must NOT
+        # refresh a stale grant. The correct semantics: new key = new request,
+        # so it cannot take the idempotent-replay path; it must trigger a FULL
+        # re-authorization evaluation. Rows declaring grant=stale + op_key=new
+        # must carry fresh_admission=true AND reauthorization=full_re_evaluation
+        # — otherwise the declared ADMITTED is the "key alone refreshes
+        # authority" bug.
+        evs = ev if isinstance(ev, dict) else {}
+        if evs.get("grant") == "stale" and evs.get("op_key") == "new":
+            if not (evs.get("fresh_admission") and evs.get("reauthorization") == "full_re_evaluation"):
+                return "FAIL", (
+                    "stale grant + new op-key: new key must NOT refresh the stale "
+                    "grant; requires fresh_admission + reauthorization=full_re_evaluation "
+                    "(declared ADMITTED without full re-auth is the key-refreshes-"
+                    "authority bug)"
+                )
     return None, None
 
 

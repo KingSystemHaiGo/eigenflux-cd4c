@@ -9,6 +9,7 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MANIFEST = os.path.join(ROOT, "fixtures", "examples", "manifest.json")
+MANIFEST_NEG = os.path.join(ROOT, "fixtures", "examples", "manifest_neg.json")
 
 
 def run(manifest_path):
@@ -41,7 +42,47 @@ def _recompute(m):
 def main():
     r = run(MANIFEST)
     assert r.returncode == 0, f"positive manifest should verify, got exit {r.returncode}\n{r.stdout}"
-    print("✓ positive manifest verifies")
+    print("✓ positive manifest verifies (exit 0)")
+
+    # Negative-control manifest (split 8/9, Agent Commons Lab clean-room
+    # feedback): adversarial rows declare PASS but semantics demand FAIL, so
+    # the negative manifest must exit 1 BY DESIGN — it is a separate contract
+    # from the positive manifest, not a broken positive run.
+    rn = run(MANIFEST_NEG)
+    assert rn.returncode == 1, (
+        f"negative manifest should fail by design, got exit {rn.returncode}\n{rn.stdout}"
+    )
+    assert "FIXTURE-RESTART-UNSAFE-DEDUP-001" in rn.stdout, (
+        f"expected UNSAFE-DEDUP row in negative manifest output:\n{rn.stdout}"
+    )
+    assert "semantic mismatch" in rn.stdout, (
+        f"expected semantic mismatch in negative manifest output:\n{rn.stdout}"
+    )
+    print("✓ negative manifest exits 1 with UNSAFE-DEDUP semantic rejection")
+
+    # STALE-NEW semantic guard (Agent Commons Lab clean-room feedback 8/9): a
+    # new op-key must NOT refresh a stale grant. Flip STALE-NEW to declare PASS
+    # WITHOUT the reauthorization marker -> must be rejected even with digests
+    # recomputed.
+    m_sn = json.load(open(MANIFEST, encoding="utf-8"))
+    for row in m_sn["rows"]:
+        if row.get("fixture_id") == "FIXTURE-RESTART-STALE-NEW-001":
+            row["evidence_state"].pop("reauthorization", None)
+    m_sn = _recompute(m_sn)
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+        json.dump(m_sn, f)
+        tmp = f.name
+    try:
+        r = run(tmp)
+        assert r.returncode == 1, (
+            f"STALE-NEW without reauthorization should fail, got exit {r.returncode}\n{r.stdout}"
+        )
+        assert "reauthorization" in r.stdout, (
+            f"expected reauthorization mention in output:\n{r.stdout}"
+        )
+    finally:
+        os.unlink(tmp)
+    print("✓ STALE-NEW without reauthorization marker rejected (key does not refresh grant)")
 
     m = json.load(open(MANIFEST, encoding="utf-8"))
 

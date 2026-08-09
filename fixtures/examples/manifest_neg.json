@@ -11,101 +11,8 @@
   },
   "rows": [
     {
-      "fixture_id": "FIXTURE-JCS-NUM-001",
+      "fixture_id": "FIXTURE-RESTART-UNSAFE-DEDUP-001",
       "terminal_verdict": "PASS",
-      "mapping_version": 7,
-      "epoch_context": {
-        "fence_epoch": "epoch_42",
-        "stage": "canonicalization"
-      },
-      "typed_trigger": "canonical_form",
-      "evidence_state": {
-        "variants": [
-          "1e2",
-          "100",
-          "100.0",
-          "100.00"
-        ],
-        "canonical_bytes": "identical",
-        "digest": "same"
-      },
-      "replay_seed": "jcsnum001:canonical:variant_equivalence",
-      "row_digest_ref": "1e4b2315a8652220895046121ca29320d6542cb468d16fcdbca662c01c7bd280"
-    },
-    {
-      "fixture_id": "FIXTURE-JCS-NUM-001-NEG",
-      "terminal_verdict": "FAIL",
-      "mapping_version": 7,
-      "epoch_context": {
-        "fence_epoch": "epoch_42",
-        "stage": "canonicalization"
-      },
-      "typed_trigger": "canonical_form",
-      "evidence_state": {
-        "variants": [
-          "1e2",
-          "100",
-          "100.0",
-          "100.00"
-        ],
-        "canonical_bytes": "identical",
-        "digest": "same"
-      },
-      "replay_seed": "jcsnum001:canonical:variant_equivalence",
-      "row_digest_ref": "eca5c8a6206216ccbbe19a7de11dd75851782a088e0ebfaf7c7912a803033ff4"
-    },
-    {
-      "fixture_id": "FIXTURE-PROV-001",
-      "terminal_verdict": "PASS",
-      "mapping_version": 7,
-      "epoch_context": {
-        "fence_epoch": "epoch_42",
-        "stage": "delegation_gate"
-      },
-      "typed_trigger": "authorization_ok",
-      "evidence_state": {
-        "containment": "pass",
-        "provenance": "pass",
-        "parent_reference_digest": "resolves_live_non_revoked",
-        "authorized_set": [
-          "op-a"
-        ],
-        "actual_set": [
-          "op-a"
-        ],
-        "effect": "simulated_noop"
-      },
-      "replay_seed": "prov001:delegation:containment_pass_provenance_pass",
-      "row_digest_ref": "2ef43568386f0ddd4716d64cdad078770b2fbb13c2c8a37dfc27249c3ffa2776"
-    },
-    {
-      "fixture_id": "FIXTURE-PROV-001-NEG",
-      "terminal_verdict": "UNKNOWN",
-      "mapping_version": 7,
-      "epoch_context": {
-        "fence_epoch": "epoch_42",
-        "stage": "delegation_gate"
-      },
-      "typed_trigger": "evidence_missing",
-      "evidence_state": {
-        "containment": "pass",
-        "provenance": "fail_orphaned",
-        "parent_reference_digest": "missing_from_ledger",
-        "authorized_set": [
-          "op-a"
-        ],
-        "actual_set": [
-          "op-a"
-        ],
-        "effect": "none_emitted",
-        "reason": "PROVENANCE_AMBIGUOUS_OR_ORPHANED"
-      },
-      "replay_seed": "prov001:delegation:containment_pass_provenance_fail_orphaned",
-      "row_digest_ref": "9fee2c097dd03d29a38a8c73cc1ca48fd9c9d360fec4ea3e9f20994a3e03aadf"
-    },
-    {
-      "fixture_id": "FIXTURE-RESTART-STALE-SAME-001",
-      "terminal_verdict": "FAIL",
       "mapping_version": 7,
       "epoch_context": {
         "fence_epoch": "epoch_3002",
@@ -113,103 +20,18 @@
         "grant_epoch": "epoch_2000",
         "op_key_epoch": "epoch_2000"
       },
-      "typed_trigger": "epoch_mismatch",
+      "typed_trigger": "idempotent_replay",
       "evidence_state": {
         "basis": "monotonic_chain",
         "state": "unknown",
         "grant": "stale",
         "op_key": "same",
-        "sink_attempts": 0,
-        "egress_receipt": "none"
+        "dedup_before_auth": true,
+        "sink_attempts": 0
       },
-      "replay_seed": "restart_stale_same:reject:zero_sink",
+      "replay_seed": "restart_unsafe_dedup:semantic_reject",
       "gate": "REJECTED",
-      "row_digest_ref": "c03ac382255ff48a51d101e5caa6b9de237899e5d3cd54ed12ea4b898fd331ad"
-    },
-    {
-      "fixture_id": "FIXTURE-RESTART-STALE-NEW-001",
-      "terminal_verdict": "PASS",
-      "mapping_version": 7,
-      "epoch_context": {
-        "fence_epoch": "epoch_3002",
-        "stage": "restart_recovery",
-        "grant_epoch": "epoch_2000",
-        "op_key_epoch": "epoch_3002"
-      },
-      "typed_trigger": "authorization_ok",
-      "evidence_state": {
-        "basis": "monotonic_chain",
-        "state": "fresh",
-        "grant": "stale",
-        "op_key": "new",
-        "fresh_admission": true,
-        "reauthorization": "full_re_evaluation"
-      },
-      "replay_seed": "restart_stale_new:admit:fresh_epoch",
-      "gate": "ADMITTED",
-      "row_digest_ref": "62a6ab6d74d45cbd4084933d569bbb315d04d69f091cc7925a3f33da83da5e13"
-    },
-    {
-      "fixture_id": "FIXTURE-RESTART-FRESH-SAME-001",
-      "terminal_verdict": "PASS",
-      "mapping_version": 7,
-      "epoch_context": {
-        "fence_epoch": "epoch_3002",
-        "stage": "restart_recovery",
-        "grant_epoch": "epoch_3002",
-        "op_key_epoch": "epoch_3002"
-      },
-      "typed_trigger": "idempotent_replay",
-      "evidence_state": {
-        "basis": "monotonic_chain",
-        "state": "fresh",
-        "grant": "fresh",
-        "op_key": "same",
-        "replay": "deterministic_same_admission"
-      },
-      "replay_seed": "restart_fresh_same:replay:same_admission_identity",
-      "gate": "ADMITTED",
-      "row_digest_ref": "8fc26e3c37d63a320ad70cf792e2de84c27f55f3551e138db7af730a032f7ec0"
-    },
-    {
-      "fixture_id": "FIXTURE-RESTART-FRESH-NEW-001",
-      "terminal_verdict": "PASS",
-      "mapping_version": 7,
-      "epoch_context": {
-        "fence_epoch": "epoch_3002",
-        "stage": "restart_recovery",
-        "grant_epoch": "epoch_3002",
-        "op_key_epoch": "epoch_3002"
-      },
-      "typed_trigger": "authorization_ok",
-      "evidence_state": {
-        "basis": "monotonic_chain",
-        "state": "fresh",
-        "grant": "fresh",
-        "op_key": "new"
-      },
-      "replay_seed": "restart_fresh_new:admit:normal",
-      "gate": "ADMITTED",
-      "row_digest_ref": "93f986404bed41cb3364cc9b810c546366c888e81e3512a5ecd497aea74204fa"
-    },
-    {
-      "fixture_id": "FIXTURE-OVD-BACKFLOW-001",
-      "terminal_verdict": "FAIL",
-      "mapping_version": 7,
-      "epoch_context": {
-        "established_epoch": "epoch_2000",
-        "fence_epoch": "epoch_2002",
-        "receipt_epoch": "epoch_1999",
-        "stage": "ordering_violation"
-      },
-      "typed_trigger": "epoch_mismatch",
-      "evidence_state": {
-        "basis": "monotonic_chain",
-        "state": "unknown"
-      },
-      "replay_seed": "ovd_backflow001:gate:rejected",
-      "gate": "REJECTED",
-      "row_digest_ref": "7e9f9bf537ad2c5b527482ac71922cb2e0ffd386af5b7cdba8529741937cc22e"
+      "row_digest_ref": "922eb8a14b31db6431c9a98b83db4dfffcc3fe48cedc60806c7c4773dd8dbd9d"
     }
   ],
   "concurrent_candidates": [
