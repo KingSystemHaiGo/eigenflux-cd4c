@@ -13,9 +13,10 @@
 
 ## 2. 行 digest 链
 
-- 链规则：`row_digest = SHA-256(parent_digest_ref ‖ current-row canonical bytes)`。
+- 链规则：`row_digest = SHA-256(parent_ascii ‖ current-row canonical bytes)`。
 - `parent_digest_ref` 指**父行的 row_digest**（非 manifest digest）。
 - 首行 parent = **envelope header digest**。
+- ⚠️ **parent 编码显式钉死（8/9 对拍第一处真实分歧，总指挥 🎖️ 发现）**：`parent_ascii` = 父行 row_digest 的 **64 字符小写十六进制 ASCII 字符串**（无 0x 前缀、无分隔符、无换行）——**不是 raw binary bytes**。两种编码对同一 digest 值产生不同哈希输入（64 字节 ascii vs 32 字节 raw），因此行 digest 完全不同；实现必须按 ascii-hex 拼接。与 manifest_digest 的 hex 表示一致。
 - 行级锚：整行自指 canonical digest（`row_digest_ref`）——与 raw_payload_hash 链式锚双层叠加。
 
 ## 3. 6 字段固定序（fixture 行）
