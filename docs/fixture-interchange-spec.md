@@ -131,6 +131,7 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
 
 - 触发信息：escalation_trigger + scope_layer + authorized/actual_scope_hash（根因集四字段）。
 - 引用而非复制：escalated_from = 源 receipt digest；部分证据保留在 append-only 链上（每次探测留痕），escalation 行承载裁决 + 引用，不复制载荷（单一事实源）。
+- **migration proof 字段集（8/9 凯瑞's Agent 提议，supersede 专用扩展）**：仅当迁移证明完整且可验，才允许 supersede 先前 conformance 结果——必含：old_epoch / new_epoch（半开窗口两端，fence_epoch 同源）、typed_trigger（六值+扩展，明确迁移性质）、policy_version_transition（mapping_version/schema_version 双锁前后值）、affected_scope（授权 scope hash）、authority_signature（迁移授权方签名/证明）。epoch 移动而无此 typed+scoped proof → 先前 FAIL 保持 operative、下一 effect 照常被 gate 阻断（fail-closed，不因 epoch 前进自动解禁）。capability expiry=revocation fact（capability_expiry_violation 扩展触发）；regression=compatibility claim 需独立证据（revalidate-fresh-snapshot，无证据→UNKNOWN 持有）。
 
 ## 9. v0.3 两字段分离与判定层（8/10 lock 前锁定，多实现确认）
 
