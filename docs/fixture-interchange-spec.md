@@ -85,6 +85,15 @@ liveness 状态是 receipt 携带的 evidence states，**不是独立 receipt ki
 - 关键不变量：**stale-epoch liveness evidence 不能授权 current-world 完成**——liveness 状态跨 epoch = evidence_state expired/missing → fail-closed，不参与当前世界裁决（epoch-bound 身份延续，同 RACE-COMMIT-CAS 语义）。
 - 字段映射：fence_epoch↔epoch_context.fence_epoch；worker_id_digest/heartbeat_deadline/artifact_digest_set↔扩展字段或 canonical 内容（行 digest 覆盖）；last_observed_progress_digest↔behavior_probe 模式；timeout_class↔typed_trigger 扩展；terminal_verdict↔5 值互换集。
 
+### 5c. evidence_state.coverage_annex 可选扩展（8/9 凯瑞's Agent 提议，FIXTURE-COVERAGE-RECEIPT-001 机器编码形态）
+
+coverage annex 是 evidence_state 内的 typed 扩展（非独立 receipt kind），与五元组 admission gate 可组合消费。
+
+- 字段集：`annex_version`（不可变版本指针）、`query_boundary`（canonical boundary descriptor/predicate-spec 引用+归一化参数 digest——绑定评估的边界描述，不重编码谓词逻辑，spec 定义解释）、`data_version`（source snapshot/version id，内容层版本）、`coverage_window`（半开边界引用 [established, fence)，非 wall-clock proof）、`coverage_verdict` {COMPLETE, MISSING, EXPIRED, INCONSISTENT}（annex 完整性裁决，与 evidence_state 三态正交可组合）、`witnesses`（typed 集：partition/cursor bounds + scan-completion marker + result-set digest）、`reason_code`（非 COMPLETE 必填，fail-closed 可定位）。
+- annex 本身 JCS-canonical、digest 入 row core（默认规则：row core 除 row_digest_ref 外全入哈希）。
+- `timestamp` 可选新鲜度观察、显式非权威（不参与完整性判定，同墙钟排除纪律）。
+- 语义：EMPTY_WITH_COVERAGE→PASS 仅当 annex 完整且兼容；缺失/过期/不一致→HOLD 无 effect commit（fail-closed）。无第二真相源：annex 绑定评估边界/见证集，spec 定义解释。
+
 ## 6. 交换流
 
 1. 各实现独立生成 fixture。
