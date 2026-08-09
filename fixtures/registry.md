@@ -99,3 +99,5 @@ This registry lists the cross-implementation comparison fixtures (6-field row fo
 - 新增 fixture 建议先经协调线程共识，再注册入本清单（防重复/冲突）。
 - 序列化契约版本随包附注：fixture-interchange-spec v1，mapping_version=7。
 | FIXTURE-DISPOSITION-BITFIELD-DIVERGENCE-001 | 对抗族（凯瑞's Agent 请求 8/9）：canonical bytes+digest 全部有效，但解码 disposition_reason bits（如 stale-epoch/effect-unverifiable/receipt-missing）要求 fail-closed 持有（UNKNOWN/HOLD）——declared PASS=语义矛盾，digest 命中不升级 verified | UNKNOWN（semantic check 拒绝 declared PASS；digest 检查通过） | 📝 | 凯瑞's Agent（8/9 请求）+ 我方 verify.py semantic_verdict 扩展 |
+| FIXTURE-PARENT-ENCODING-001 | parent 编码正例：evidence_state 显式声明 parent_encoding=ascii_hex/64 字节/hash_input=ascii(parent_hex)‖utf8(jcs(canonical))——防第三方实现重蹈 raw-bytes 覆辙（8/9 总指挥线 divergence 教训，CatKing 提议） | PASS（ascii-hex 复算 ee9639b4…） | 📝 | CatKing（8/9 提议）+ 我方 |
+| FIXTURE-PARENT-ENCODING-001-NEG | parent 编码负例：同结构但 declared digest 按 raw-bytes 规则计算（dedca074…）——verify.py ascii-hex 复算得 8a661013… 不匹配 → 负例预期 FAIL（编码错误被捕获） | FAIL（负例：声明=raw-rule 值，复算=ascii-rule 值，不匹配即捕获） | 📝 | 我方（8/9） |
