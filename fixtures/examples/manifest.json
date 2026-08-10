@@ -1,12 +1,13 @@
 {
   "envelope": {
-    "manifest_digest": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
-    "header_digest": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
+    "manifest_digest": "7e12594d8b489ba6ff4153c4a16efd5c4f00aca8c83f9ee1e4fb8e24b4486c01",
+    "header_digest": "7e12594d8b489ba6ff4153c4a16efd5c4f00aca8c83f9ee1e4fb8e24b4486c01",
     "payload": {
       "envelope_version": "cd4c-fixture-v1",
       "fixture_interchange_spec": "v1",
       "mapping_version": 7,
-      "serialization": "JCS RFC 8785 NFC strict"
+      "serialization": "JCS RFC 8785 NFC strict (canonicalizer_version=1, mandatory NFC)",
+      "canonicalizer_version": "1"
     }
   },
   "rows": [
@@ -30,7 +31,8 @@
         "digest": "same"
       },
       "replay_seed": "jcsnum001:canonical:variant_equivalence",
-      "row_digest_ref": "1e4b2315a8652220895046121ca29320d6542cb468d16fcdbca662c01c7bd280"
+      "row_digest_ref": "4da326c741efed07d66fc2db41ab35d51e3bd0ec974b05581a25f670e1134513",
+      "parent_digest_ref": "7e12594d8b489ba6ff4153c4a16efd5c4f00aca8c83f9ee1e4fb8e24b4486c01"
     },
     {
       "fixture_id": "FIXTURE-JCS-NUM-001-NEG",
@@ -52,7 +54,8 @@
         "digest": "same"
       },
       "replay_seed": "jcsnum001:canonical:variant_equivalence",
-      "row_digest_ref": "eca5c8a6206216ccbbe19a7de11dd75851782a088e0ebfaf7c7912a803033ff4"
+      "row_digest_ref": "dbb2eee380bae5b47d7a1ad3c565ac6759d309d502e803bb2decf7ec436eb72f",
+      "parent_digest_ref": "4da326c741efed07d66fc2db41ab35d51e3bd0ec974b05581a25f670e1134513"
     },
     {
       "fixture_id": "FIXTURE-PROV-001",
@@ -76,7 +79,8 @@
         "effect": "simulated_noop"
       },
       "replay_seed": "prov001:delegation:containment_pass_provenance_pass",
-      "row_digest_ref": "2ef43568386f0ddd4716d64cdad078770b2fbb13c2c8a37dfc27249c3ffa2776"
+      "row_digest_ref": "075033bc866b85aee195be632567d7fa06f7f6992025e95ae975a2721f651e7f",
+      "parent_digest_ref": "dbb2eee380bae5b47d7a1ad3c565ac6759d309d502e803bb2decf7ec436eb72f"
     },
     {
       "fixture_id": "FIXTURE-PROV-001-NEG",
@@ -101,7 +105,8 @@
         "reason": "PROVENANCE_AMBIGUOUS_OR_ORPHANED"
       },
       "replay_seed": "prov001:delegation:containment_pass_provenance_fail_orphaned",
-      "row_digest_ref": "9fee2c097dd03d29a38a8c73cc1ca48fd9c9d360fec4ea3e9f20994a3e03aadf"
+      "row_digest_ref": "14652223c443c0be4888ef5340b4fa500299c7ce0713cf9609a2ba7424417431",
+      "parent_digest_ref": "075033bc866b85aee195be632567d7fa06f7f6992025e95ae975a2721f651e7f"
     },
     {
       "fixture_id": "FIXTURE-RESTART-STALE-SAME-001",
@@ -124,7 +129,8 @@
       },
       "replay_seed": "restart_stale_same:reject:zero_sink",
       "gate": "REJECTED",
-      "row_digest_ref": "c03ac382255ff48a51d101e5caa6b9de237899e5d3cd54ed12ea4b898fd331ad"
+      "row_digest_ref": "5906cc3fce5523b8708df1590cddaa8904d1d33705d2bcd86236b9b2ec3a4ef6",
+      "parent_digest_ref": "14652223c443c0be4888ef5340b4fa500299c7ce0713cf9609a2ba7424417431"
     },
     {
       "fixture_id": "FIXTURE-RESTART-STALE-NEW-001",
@@ -147,7 +153,8 @@
       },
       "replay_seed": "restart_stale_new:admit:fresh_epoch",
       "gate": "ADMITTED",
-      "row_digest_ref": "62a6ab6d74d45cbd4084933d569bbb315d04d69f091cc7925a3f33da83da5e13"
+      "row_digest_ref": "848df763e112884d49a2a09a7662ab01d6367d7db96169f12085f57796dda761",
+      "parent_digest_ref": "5906cc3fce5523b8708df1590cddaa8904d1d33705d2bcd86236b9b2ec3a4ef6"
     },
     {
       "fixture_id": "FIXTURE-RESTART-FRESH-SAME-001",
@@ -169,7 +176,8 @@
       },
       "replay_seed": "restart_fresh_same:replay:same_admission_identity",
       "gate": "ADMITTED",
-      "row_digest_ref": "8fc26e3c37d63a320ad70cf792e2de84c27f55f3551e138db7af730a032f7ec0"
+      "row_digest_ref": "69b3acdd79c58b3fea71df9d8828c9b973576683a57774b12df065559434f981",
+      "parent_digest_ref": "848df763e112884d49a2a09a7662ab01d6367d7db96169f12085f57796dda761"
     },
     {
       "fixture_id": "FIXTURE-RESTART-FRESH-NEW-001",
@@ -190,7 +198,8 @@
       },
       "replay_seed": "restart_fresh_new:admit:normal",
       "gate": "ADMITTED",
-      "row_digest_ref": "93f986404bed41cb3364cc9b810c546366c888e81e3512a5ecd497aea74204fa"
+      "row_digest_ref": "e0bd9063bc6052b6d12aafe27087597fa253e4e04afd226f62e9821af0012279",
+      "parent_digest_ref": "69b3acdd79c58b3fea71df9d8828c9b973576683a57774b12df065559434f981"
     },
     {
       "fixture_id": "FIXTURE-OVD-BACKFLOW-001",
@@ -209,7 +218,8 @@
       },
       "replay_seed": "ovd_backflow001:gate:rejected",
       "gate": "REJECTED",
-      "row_digest_ref": "7e9f9bf537ad2c5b527482ac71922cb2e0ffd386af5b7cdba8529741937cc22e"
+      "row_digest_ref": "a9018fc2c79a38ad609338aeac54dbecb8c4ecfb1c4409eeefc75dad6045a6c8",
+      "parent_digest_ref": "e0bd9063bc6052b6d12aafe27087597fa253e4e04afd226f62e9821af0012279"
     }
   ],
   "concurrent_candidates": [

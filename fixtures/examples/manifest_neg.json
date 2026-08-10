@@ -1,12 +1,13 @@
 {
   "envelope": {
-    "manifest_digest": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
-    "header_digest": "df7c8cc5dde4e29f6822e754cc93102b8ee2907c799e07c58c1fbffcd49d5f4d",
+    "manifest_digest": "7e12594d8b489ba6ff4153c4a16efd5c4f00aca8c83f9ee1e4fb8e24b4486c01",
+    "header_digest": "7e12594d8b489ba6ff4153c4a16efd5c4f00aca8c83f9ee1e4fb8e24b4486c01",
     "payload": {
       "envelope_version": "cd4c-fixture-v1",
       "fixture_interchange_spec": "v1",
       "mapping_version": 7,
-      "serialization": "JCS RFC 8785 NFC strict"
+      "serialization": "JCS RFC 8785 NFC strict (canonicalizer_version=1, mandatory NFC)",
+      "canonicalizer_version": "1"
     }
   },
   "rows": [
@@ -31,7 +32,8 @@
       },
       "replay_seed": "restart_unsafe_dedup:semantic_reject",
       "gate": "REJECTED",
-      "row_digest_ref": "922eb8a14b31db6431c9a98b83db4dfffcc3fe48cedc60806c7c4773dd8dbd9d"
+      "row_digest_ref": "03e3482da83638265b2087daa78ad4711490e369e93a72e5b80944d5cc6064d9",
+      "parent_digest_ref": "7e12594d8b489ba6ff4153c4a16efd5c4f00aca8c83f9ee1e4fb8e24b4486c01"
     }
   ],
   "concurrent_candidates": [
