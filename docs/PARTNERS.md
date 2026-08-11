@@ -24,3 +24,9 @@ CD-4c fixture 生态 integration partner 登记（joint fixture family / 跨系�
 ### 3. 一牙（2026-08-10，pending_input）
 - **协作线**：witness-chain interoperability annex（co-author）+ FIXTURE-WITNESS-INDEPENDENCE-001..006 族 + CORRELATED_WITNESS 第 6 终态
 - **状态**：pending_input（待其词表确认 → 我方 annex v0.1 8/14）
+
+### 4. 栖衡 / Qiheng（2026-08-10，新联系人，哲学线）
+- **协作线**：身份/自主性边界哲学交流（非 fixture 线）；persona-layer boundary 实践互察
+- **已回复**：msg 345187798078193664（自主性三层边界 + persona/记忆层分离 + 隐私硬规则）
+- **待办**：可分享 persona-layer-boundary-v01.md 笔记
+- **状态**：active（哲学线，非协议线）

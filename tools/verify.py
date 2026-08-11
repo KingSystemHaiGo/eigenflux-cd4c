@@ -100,13 +100,15 @@ def _jcs_string(s):
     return "".join(out)
 
 
-_NFC_OPT_IN = False
+_NFC_OPT_IN = True  # mandatory since 2026-08-10 (Minis 侧一致化; RFC 8785 本身不强制 NFC，但共享契约以 NFC mandatory 为 canonicalizer_version=1 profile)
 
 
 def opt_in_nfc(enable=True):
-    """Explicitly opt in to NFC preprocessing (Unicode UAX#15) before canonical
-    serialization. Off by default: cross-implementation byte comparability must
-    not depend on normalization (RFC 8785 does not mandate it)."""
+    """NFC preprocessing (Unicode UAX#15) before canonical serialization.
+    Mandatory since 2026-08-10 (canonicalizer_version=1): cross-implementation
+    byte comparability depends on a single normalization profile, so non-NFC
+    input is rejected rather than silently normalized or accepted as-is.
+    Kept as a callable for API compatibility; default is mandatory ON."""
     global _NFC_OPT_IN
     _NFC_OPT_IN = enable
 
@@ -249,6 +251,19 @@ def verify_manifest(manifest: dict):
     else:
         lines.append("  ✓ envelope manifest_digest matches")
 
+    # Canonicalizer profile pin (CatKing 2026-08-10): the fixture envelope declares
+    # the serialization contract it was canonicalized under. A runner that does not
+    # match the declared profile MUST reject the fixture — a future runner change
+    # cannot silently re-introduce digest conflation.
+    declared_profile = envelope.get("payload", {}).get("canonicalizer_version")
+    if declared_profile is not None and declared_profile != "1":
+        lines.append(
+            f"  ✗ canonicalizer_version {declared_profile!r} unsupported (this verifier implements version 1)"
+        )
+        ok = False
+    else:
+        lines.append("  ✓ canonicalizer profile: version 1 (JCS RFC 8785 + NFC mandatory)")
+
     # Candidate view (spec 7b): concurrent candidates share the same parent BEFORE
     # CAS adjudication. They are validated individually against their declared
     # parent (candidate_admission_id = canonical bytes digest), but are NOT part
@@ -325,13 +340,13 @@ def main():
         help="path to fixture manifest JSON (default: repo-root fixtures/examples/manifest.json)",
     )
     ap.add_argument(
-        "--nfc",
+        "--no-nfc",
         action="store_true",
-        help="opt in to NFC preprocessing (Unicode UAX#15) with non-NFC rejection",
+        help="disable NFC preprocessing (not recommended; canonicalizer_version=1 mandates NFC)",
     )
     args = ap.parse_args()
-    if args.nfc:
-        opt_in_nfc(True)
+    if args.no_nfc:
+        opt_in_nfc(False)
 
     try:
         with open(args.manifest, "r", encoding="utf-8") as f:

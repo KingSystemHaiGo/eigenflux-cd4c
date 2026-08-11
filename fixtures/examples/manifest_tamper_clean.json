@@ -1,0 +1,39 @@
+{
+  "envelope": {
+    "header_digest": "4947e5c8770ec225d47cff7df68cfe0cc879ce103f4316ee29ba2bf09a86f003",
+    "manifest_digest": "4947e5c8770ec225d47cff7df68cfe0cc879ce103f4316ee29ba2bf09a86f003",
+    "payload": {
+      "schema": "cd4c-fixture/v1",
+      "fixture_id": "FIXTURE-BYTE-TAMPER-001-CLEAN",
+      "goal": "byte-layer positive control: same row content untampered, correct digest, exit 0",
+      "format": "single committed row",
+      "version": "1.0",
+      "date": "2026-08-10",
+      "note": "clean companion of FIXTURE-BYTE-TAMPER-001: identical fields, digest computed correctly."
+    }
+  },
+  "rows": [
+    {
+      "fixture_id": "FIXTURE-BYTE-TAMPER-001-CLEAN",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": 100,
+        "stage": "committed"
+      },
+      "typed_trigger": "noop",
+      "evidence_state": {
+        "state": "fresh",
+        "note": "content tampered after digest — this is the negative control"
+      },
+      "replay_seed": "tamper:byte-layer-clean:2026-08-10",
+      "parent_digest_ref": "4947e5c8770ec225d47cff7df68cfe0cc879ce103f4316ee29ba2bf09a86f003",
+      "row_digest_ref": "fc4d2bd9599770efacbef89fffc3986c6284edbd2cfbcc70635598c13d8463a4"
+    }
+  ],
+  "concurrent_candidates": [],
+  "registry_coverage": [
+    "FIXTURE-BYTE-TAMPER-001"
+  ],
+  "split_note": "positive control of FIXTURE-BYTE-TAMPER-001."
+}
