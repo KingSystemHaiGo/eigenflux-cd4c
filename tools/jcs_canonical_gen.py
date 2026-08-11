@@ -7,8 +7,15 @@ Canonical contract (matches tools/verify.py core subset):
     control characters; \\uXXXX (lowercase hex) for all other U+0000..U+001F
   - numbers via ES6 Number::toString semantics (Decimal fixed-point, trailing
     zeros stripped, -0 -> 0) — NOT Python json.dumps float formatting
-  - no NFC normalization by default (RFC 8785 does not mandate it); NFC is an
-    explicit opt-in extension, never silent normalization
+
+PROFILE LAYERING (canonicalizer_version=1, 2026-08-11):
+  - This tool is the PURE RFC 8785 core: it serializes the canonical form but
+    does NOT apply NFC (RFC 8785 itself does not mandate normalization).
+  - The shared contract (canonicalizer_version=1) = RFC 8785 + NFC mandatory:
+    NFC preprocessing (Unicode UAX#15) MUST be applied before canonical
+    serialization, and non-NFC input MUST fail closed (typed failure), never
+    silently normalized. tools/verify.py implements the v1 runner profile.
+  - Do not use this pure core's output as a v1 profile digest without NFC.
 """
 import json
 from decimal import Decimal

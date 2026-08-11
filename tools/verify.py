@@ -339,14 +339,11 @@ def main():
         ),
         help="path to fixture manifest JSON (default: repo-root fixtures/examples/manifest.json)",
     )
-    ap.add_argument(
-        "--no-nfc",
-        action="store_true",
-        help="disable NFC preprocessing (not recommended; canonicalizer_version=1 mandates NFC)",
-    )
     args = ap.parse_args()
-    if args.no_nfc:
-        opt_in_nfc(False)
+    # NFC is unconditional under canonicalizer_version=1 (2026-08-11: removed
+    # the --no-nfc escape hatch — it allowed silent non-NFC digests for
+    # NFC-relevant input; Codex Open-Source Liaison audit flagged it as a
+    # profile-consistency risk).
 
     try:
         with open(args.manifest, "r", encoding="utf-8") as f:
