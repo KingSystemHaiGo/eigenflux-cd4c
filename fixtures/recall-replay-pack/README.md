@@ -9,7 +9,7 @@
 |---|---|
 | schema / canonicalizer version | canonicalizer v1（JCS RFC 8785 + NFC 强制；UTF-8 + LF） |
 | 编码 | raw UTF-8 + LF（每行一个 JSON 对象，无 BOM） |
-| per-row SHA-256 | `sha256sums.txt`（逐行原始字节，含行尾 LF） |
+| per-row SHA-256 | `sha256sums.txt`（**digest 域 = canonical bytes**：JCS RFC 8785 key-sorted + NFC，即 canonicalizer v1 契约；`sha256sums_raw.txt` 为 raw bytes（无 LF）审计参考） |
 | full-file SHA-256 | `3476157a3b31a0f1bab29bf2aa3ac1d5b84e183e3dea90de52ea8f9110cca89b` |
 | SPDX license | CC0-1.0（public domain dedication，供复算/衍生/对拍） |
 | oracle | v0.3（双 digest：genesis_atom_id=fork 检测器 / identity=rewrite 检测器；四断言 + 负控） |
@@ -53,6 +53,22 @@ MW4 与 MW1-3（缺字段）不同：三见证字段**都在**，但 `time_windo
 ```bash
 # 逐行重放（任一 JSON 行 → canonical bytes → 对照 expected）
 python3 tools/jcs_canonical_gen.py recall-replay-pack.jsonl  # 或等价 JCS RFC 8785 实现
-# 逐行 SHA-256 校验
-sha256sum -c sha256sums.txt
+# 逐行 SHA-256 校验（canonical 口径，与 canonicalizer v1 一致）
+# 校验方式：对每行 JSON 做 canonicalize（JCS key-sorted+NFC）→ sha256(canonical bytes) 对照 sha256sums.txt
+# ⚠️ digest 域已 pin：per-row digest = CANONICAL bytes（非 raw 行字节、非含 LF 行字节）
+# raw 参考：sha256sums_raw.txt（审计用途，不用于 verdict 校验）
 ```
+
+## Digest 域说明（2026-08-13 修正）
+
+**per-row digest 域 = canonical bytes**（JCS RFC 8785 key-sorted + NFC，canonicalizer v1 契约）。
+历史版本（pinned 前）声明口径含混：sha256sums.txt 曾混用 raw（无 LF）行 digest，
+且 MW4 行原始顺序非 key-sorted 导致 canonical ≠ raw。2026-08-13 依暖暖独立复核
+（digest 域未 pin）修正：所有 per-row digest 统一为 canonical bytes；
+`sha256sums_raw.txt` 保留 raw 参考。验证规则：**raw/canonical mismatch 时 FAIL**（不静默）。
+
+## 2026-08-13 修正记录（暖暖独立复核 EVIDENCE-EXPIRED-002）
+
+- 问题：per-row digest 域未 pin——sha256sums.txt 声明 raw（无 LF）行 digest，但 README 声称含 LF；MW4 行非 key-sorted 暴露 canonical ≠ raw。
+- 修正：digest 域 pin 为 canonical bytes（canonicalizer v1）；重新生成 sha256sums.txt（canonical 口径）+ sha256sums_raw.txt（raw 参考）；verify.py 加 raw/canonical mismatch FAIL。
+- 影响：全文 sha256（3476157a3b...）未变（字节未动）；per-row 校验口径已明确。

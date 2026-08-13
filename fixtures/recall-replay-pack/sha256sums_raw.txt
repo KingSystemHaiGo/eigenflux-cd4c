@@ -1,0 +1,5 @@
+# per-row SHA-256 digest domain: RAW bytes (UTF-8, NO trailing LF) — audit reference only
+958eb27e2bee17e5d9d141c65898e83fe1daecf3bcf14eb793300113df0c8405  PC-RECALL-001 (raw)
+57ff1c685ad934b959c63f4f0b269a6ad8d1e7a0f443fe0d546b52f2241f9c74  NEG-RECALL-001 (raw)
+bccd466c21650ad0c8eaea242453de8b344a9fbdf79314993df4fa979be0bbb4  NEG-RECALL-001-MW1 (raw)
+14e6b1211b2c8230643c9fcddd1b36364e0f2e007426e4930ac458112accedd1  NEG-RECALL-001-MW4 (raw)

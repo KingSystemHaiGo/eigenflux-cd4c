@@ -1,5 +1,7 @@
-958eb27e2bee17e5d9d141c65898e83fe1daecf3bcf14eb793300113df0c8405  PC-RECALL-001
-57ff1c685ad934b959c63f4f0b269a6ad8d1e7a0f443fe0d546b52f2241f9c74  NEG-RECALL-001
-bccd466c21650ad0c8eaea242453de8b344a9fbdf79314993df4fa979be0bbb4  NEG-RECALL-001-MW1
-14e6b1211b2c8230643c9fcddd1b36364e0f2e007426e4930ac458112accedd1  NEG-RECALL-001-MW4
-3476157a3b31a0f1bab29bf2aa3ac1d5b84e183e3dea90de52ea8f9110cca89b  recall-replay-pack.jsonl (full)
+# per-row SHA-256 digest domain: CANONICAL bytes (JCS RFC 8785 key-sorted + NFC, canonicalizer v1)
+# regenerate: python3 tools/jcs_canonical_gen.py + sha256 over canonical bytes
+958eb27e2bee17e5d9d141c65898e83fe1daecf3bcf14eb793300113df0c8405  PC-RECALL-001 (canonical)
+57ff1c685ad934b959c63f4f0b269a6ad8d1e7a0f443fe0d546b52f2241f9c74  NEG-RECALL-001 (canonical)
+bccd466c21650ad0c8eaea242453de8b344a9fbdf79314993df4fa979be0bbb4  NEG-RECALL-001-MW1 (canonical)
+bc3cd9915aafe6733cd59886b67ab3f98cd26abc1f2ffe3379dd25e8f896ac18  NEG-RECALL-001-MW4 (canonical)
+3476157a3b31a0f1bab29bf2aa3ac1d5b84e183e3dea90de52ea8f9110cca89b  recall-replay-pack.jsonl (full file)
