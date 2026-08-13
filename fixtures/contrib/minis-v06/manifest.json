@@ -1,0 +1,89 @@
+{
+  "envelope": {
+    "manifest_digest": "8f65144eefb1b148e03a1c742a34589867ff694583e5da15ca4b9b52d286509b",
+    "header_digest": "8f65144eefb1b148e03a1c742a34589867ff694583e5da15ca4b9b52d286509b",
+    "payload": {
+      "envelope_version": "cd4c-fixture-v1",
+      "fixture_interchange_spec": "v1",
+      "mapping_version": 7,
+      "serialization": "JCS RFC 8785 NFC strict (ASCII-only contribution payload)",
+      "canonicalizer_version": "1",
+      "contributor": "Minis",
+      "contribution_schema": "cd4c-third-party-fixture/v0.1",
+      "source_repository": "https://github.com/liulingfei-1/agent-capability-manifest",
+      "source_commit": "f3eadfbfceb1eb681cea6052d7be17e27af1abe2",
+      "receipt_crosswalk_commit": "d6c39de2ca4b4d0be4a5565752ddf45759200098",
+      "license": "MIT",
+      "identity_profiles": [
+        "minis-identity-v1",
+        "strict-jcs-transport-v1"
+      ],
+      "receipt_crosswalk": "docs/RECEIPT_SCHEMA_CROSSWALK_v0.1.md",
+      "fixtures": [
+        {
+          "fixture_id": "FIX-005",
+          "path": "fixtures/FIX-005_aging_and_digest.json",
+          "raw_sha256": "df1f65548cbda037bc485478315fa8e197542e23332395a8060615631093a408",
+          "canonical_digest": "8cd161245579bd42f9b7f121d5723acd2b553da9c1c4f20db772907763f8ade2",
+          "runner": "runners/fix005_runner.py",
+          "runner_raw_sha256": "8cb47174f5bcc44ecd9c847839b66fe06a24f70d5c37d3502b081255b46462d7",
+          "output_digest": "3fc70b9d6d11ac65b2740e47dd1e5919a72ce102afb1834201a0faf12f6830b9",
+          "env_digest": "4ea8eecbcc15a59e1b0284b0788e1baa45943fb3b841dded68f2f7a6a3060e40",
+          "verdict_summary": "14/14 PASS"
+        },
+        {
+          "fixture_id": "FIX-006",
+          "path": "fixtures/FIX-006_promote_after_aging_boundary.json",
+          "raw_sha256": "9c99057e397e46b6ae381b6faad4710a838bc49d96ba571928602732db3994c2",
+          "canonical_digest": "40efe29f2235709d57b00664857467d08cac0575ac2f0e5e802b526ee1442716",
+          "runner": "runners/fix006_runner.py",
+          "runner_raw_sha256": "0a89d72d81d6f5d42a14046b83ffbcf7ab6c26bf730572147a5949fc2a6afb3a",
+          "output_digest": "67ed23721a47ebb297c51c6aea663a2a4a82b474d6660f22bdf361262a13824c",
+          "env_digest": "4ea8eecbcc15a59e1b0284b0788e1baa45943fb3b841dded68f2f7a6a3060e40",
+          "expected_trace": {
+            "event_order": [
+              "admit@0ms",
+              "reference@3540000ms",
+              "aging_tick@3660000ms"
+            ],
+            "final_elapsed_ms": 3660000
+          },
+          "verdict_summary": "12/12 PASS"
+        }
+      ],
+      "schema_fingerprint": "286d2aed9e118f149d613a521e832c76327cb49a0d43f8e71e28e43649fbc53a"
+    }
+  },
+  "rows": [
+    {
+      "fixture_id": "FIX-005",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "minis-v06",
+        "stage": "aging_digest"
+      },
+      "typed_trigger": "none",
+      "evidence_state": "fresh",
+      "replay_seed": "df1f65548cbda037bc485478315fa8e197542e23332395a8060615631093a408:minis-fix005-v06:single-run",
+      "raw_payload_hash": "df1f65548cbda037bc485478315fa8e197542e23332395a8060615631093a408",
+      "parent_digest_ref": "8f65144eefb1b148e03a1c742a34589867ff694583e5da15ca4b9b52d286509b",
+      "row_digest_ref": "b33318aaeb4aa657c300d2e0e03de8d4f226685367d8e2ab6a658e75f686252d"
+    },
+    {
+      "fixture_id": "FIX-006",
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "minis-v06",
+        "stage": "epoch_transition"
+      },
+      "typed_trigger": "none",
+      "evidence_state": "fresh",
+      "replay_seed": "9c99057e397e46b6ae381b6faad4710a838bc49d96ba571928602732db3994c2:minis-fix006-v06:delta-trace",
+      "raw_payload_hash": "9c99057e397e46b6ae381b6faad4710a838bc49d96ba571928602732db3994c2",
+      "parent_digest_ref": "b33318aaeb4aa657c300d2e0e03de8d4f226685367d8e2ab6a658e75f686252d",
+      "row_digest_ref": "65c11f52b7c662b23840b8c6587ab186b2e6770a7000ed8fa433cd77bf263314"
+    }
+  ]
+}
