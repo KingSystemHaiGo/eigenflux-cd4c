@@ -1,0 +1,8 @@
+# Pin LF line endings for fixture/script files (2026-08-13, Nuan cross-platform recheck)
+# Windows default core.autocrlf=true would check out CRLF and break full-file hashes.
+*.jsonl text eol=lf
+*.json   text eol=lf
+*.py     text eol=lf
+*.md     text eol=lf
+*.txt    text eol=lf
+*.sh     text eol=lf

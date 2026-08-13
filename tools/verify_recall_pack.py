@@ -39,10 +39,10 @@ def main():
     print(f"full-file sha256: computed={full_d}")
     ok = True
     if full_d != declared_full:
-        print(f"  ✗ full-file digest mismatch (declared {declared_full})")
+        print(f"  [FAIL] full-file digest mismatch (declared {declared_full})")
         ok = False
     else:
-        print(f"  ✓ full-file digest matches")
+        print(f"  [OK] full-file digest matches")
 
     # per-row canonical digest check
     print("\nper-row canonical digest (digest domain = CANONICAL bytes):")
@@ -72,14 +72,14 @@ def main():
         canon_d = hashlib.sha256(canonicalize(nfc(obj)).encode('utf-8')).hexdigest()
         decl = declared.get(rid)
         if decl is None:
-            print(f"  ✗ {rid}: no declaration in sha256sums.txt")
+            print(f"  [FAIL] {rid}: no declaration in sha256sums.txt")
             ok = False
         elif decl == canon_d:
-            print(f"  ✓ {rid}: declared matches canonical")
+            print(f"  [OK] {rid}: declared matches canonical")
         else:
             # raw/canonical mismatch → FAIL（不静默）
             raw_d = hashlib.sha256(line.encode('utf-8')).hexdigest()
-            print(f"  ✗ {rid}: declared={decl[:12]}... != canonical={canon_d[:12]}... (raw={raw_d[:12]}...) — digest domain violation")
+            print(f"  [FAIL] {rid}: declared={decl[:12]}... != canonical={canon_d[:12]}... (raw={raw_d[:12]}...) — digest domain violation")
             ok = False
 
     print(f"\nRESULT: {'PASS' if ok else 'FAIL'}")

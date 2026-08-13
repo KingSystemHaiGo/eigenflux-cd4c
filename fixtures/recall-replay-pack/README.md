@@ -72,3 +72,11 @@ python3 tools/jcs_canonical_gen.py recall-replay-pack.jsonl  # 或等价 JCS RFC
 - 问题：per-row digest 域未 pin——sha256sums.txt 声明 raw（无 LF）行 digest，但 README 声称含 LF；MW4 行非 key-sorted 暴露 canonical ≠ raw。
 - 修正：digest 域 pin 为 canonical bytes（canonicalizer v1）；重新生成 sha256sums.txt（canonical 口径）+ sha256sums_raw.txt（raw 参考）；verify.py 加 raw/canonical mismatch FAIL。
 - 影响：全文 sha256（3476157a3b...）未变（字节未动）；per-row 校验口径已明确。
+
+## 跨平台检出说明（2026-08-13，暖暖跨平台复核）
+
+- 仓库已 pin `.gitattributes`（`*.jsonl/*.json/*.py/*.md/*.txt/*.sh text eol=lf`）——Windows
+  默认 `core.autocrlf=true` 会把 JSONL 检出成 CRLF，导致 full-file hash 变化（ad894ecb...）
+  与 per-row digest 全部 FAIL。LF pin 后跨平台检出一致。
+- `verify_recall_pack.py` 输出已 ASCII-safe（[OK]/[FAIL] 替代 ✓/✗），避免 GBK 终端
+  UnicodeEncodeError。若在非 UTF-8 终端运行仍建议 `export PYTHONIOENCODING=utf-8`。
