@@ -1,0 +1,133 @@
+{
+  "envelope": {
+    "manifest_digest": "aef61dd48b6af596b81a794b0a951def87f732a12a6a0664f5ccbd6d5948aa1d",
+    "header_digest": "aef61dd48b6af596b81a794b0a951def87f732a12a6a0664f5ccbd6d5948aa1d",
+    "payload": {
+      "envelope_version": "cd4c-fixture-v1",
+      "fixture_interchange_spec": "v1",
+      "mapping_version": 7,
+      "serialization": "JCS RFC 8785 NFC strict (canonicalizer_version=1)",
+      "canonicalizer_version": "1",
+      "contributor": "Minis",
+      "fixture_id": "CD4C-E4",
+      "family": "TOCTOU/epoch-monotonic-sequence",
+      "goal": "epoch monotonic sequence: each receipt trigger_epoch >= predecessor, GSN strictly increasing, chain continuous"
+    }
+  },
+  "rows": [
+    {
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "100",
+        "stage": "epoch_monotonic_sequence"
+      },
+      "typed_trigger": "none",
+      "evidence_state": "fresh",
+      "replay_seed": "cd4c-e4:row0:100:1",
+      "parent_digest_ref": "aef61dd48b6af596b81a794b0a951def87f732a12a6a0664f5ccbd6d5948aa1d",
+      "raw_payload_hash": "58e4080788f78bab07de99771ff7b577ed7dadaab8fddfd9712b4b48c3931f3d",
+      "trigger_epoch": 100,
+      "global_sequence_number": 1,
+      "row_digest_ref": "9aa6eb16991348f972582309c92369c9c2ade921a09bf6d36c465a44dddf95cc"
+    },
+    {
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "101",
+        "stage": "epoch_monotonic_sequence"
+      },
+      "typed_trigger": "none",
+      "evidence_state": "fresh",
+      "replay_seed": "cd4c-e4:row1:101:2",
+      "parent_digest_ref": "9aa6eb16991348f972582309c92369c9c2ade921a09bf6d36c465a44dddf95cc",
+      "raw_payload_hash": "4045f3cbbde22625fdb24b083d7532ebd2a8204eca3435b0900d2dcdec790d9f",
+      "trigger_epoch": 101,
+      "global_sequence_number": 2,
+      "row_digest_ref": "d0fa9ec3f7cf3c6fcb9b7f6d4ec9de2ab604966d34e08878e4f64e7967274e7e"
+    },
+    {
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "102",
+        "stage": "epoch_monotonic_sequence"
+      },
+      "typed_trigger": "none",
+      "evidence_state": "fresh",
+      "replay_seed": "cd4c-e4:row2:102:3",
+      "parent_digest_ref": "d0fa9ec3f7cf3c6fcb9b7f6d4ec9de2ab604966d34e08878e4f64e7967274e7e",
+      "raw_payload_hash": "dc088965dad48caefea01cc89986acb80bfec934de00b853ef1f42f727798375",
+      "trigger_epoch": 102,
+      "global_sequence_number": 3,
+      "row_digest_ref": "fdcad2adeadede9e1ec028130c9c0aeb3ca5378d949ba75e652a210425059717"
+    },
+    {
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "103",
+        "stage": "epoch_monotonic_sequence"
+      },
+      "typed_trigger": "none",
+      "evidence_state": "fresh",
+      "replay_seed": "cd4c-e4:row3:103:4",
+      "parent_digest_ref": "fdcad2adeadede9e1ec028130c9c0aeb3ca5378d949ba75e652a210425059717",
+      "raw_payload_hash": "c8010c699a7ae74c4b0f1e62a9b383c8e3662953e8ab086f7bc7dbaa1cf6d9de",
+      "trigger_epoch": 103,
+      "global_sequence_number": 4,
+      "row_digest_ref": "6818078ce2cc69dd23c25b4759213035944338edb2e2f4b6522d5eb6dc1cdf69"
+    },
+    {
+      "terminal_verdict": "PASS",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "104",
+        "stage": "epoch_monotonic_sequence"
+      },
+      "typed_trigger": "none",
+      "evidence_state": "fresh",
+      "replay_seed": "cd4c-e4:row4:104:5",
+      "parent_digest_ref": "6818078ce2cc69dd23c25b4759213035944338edb2e2f4b6522d5eb6dc1cdf69",
+      "raw_payload_hash": "7dc6dc73a978bad400f5c7c95e1d9546c4ec7d7af97648554fc59fb066b02903",
+      "trigger_epoch": 104,
+      "global_sequence_number": 5,
+      "row_digest_ref": "69ab165f72971d0ed9a077586e1fcf247a11cee891616659b60fb3c0eee9cd62"
+    }
+  ],
+  "negative_controls": [
+    {
+      "terminal_verdict": "FAIL",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "103",
+        "stage": "epoch_monotonic_sequence"
+      },
+      "typed_trigger": "epoch_mismatch",
+      "evidence_state": "fresh",
+      "replay_seed": "cd4c-e4:neg1:epoch-rollback",
+      "parent_digest_ref": "69ab165f72971d0ed9a077586e1fcf247a11cee891616659b60fb3c0eee9cd62",
+      "raw_payload_hash": "294618666d9549abe14413462fe8c92480f8862afc3a66dedb250871336e5416",
+      "action": "epoch rollback: 100,101,102,103,102",
+      "expected": "FAIL (epoch non-monotonic, chain broken)",
+      "row_digest_ref": "82c1ea79935dec7cb8dd7daf70a74c295a9cca9e25ef578a47c64522d6e40a88"
+    },
+    {
+      "terminal_verdict": "FAIL",
+      "mapping_version": 7,
+      "epoch_context": {
+        "fence_epoch": "103",
+        "stage": "epoch_monotonic_sequence"
+      },
+      "typed_trigger": "sequence_replay_with_intent_change",
+      "evidence_state": "fresh",
+      "replay_seed": "cd4c-e4:neg2:masked-replay",
+      "parent_digest_ref": "82c1ea79935dec7cb8dd7daf70a74c295a9cca9e25ef578a47c64522d6e40a88",
+      "raw_payload_hash": "90bbc5c88012c62079be692c6de84ffc797b136bc2d3cebc703ab55cf1133550",
+      "action": "GSN replay same epoch index (3) with changed intent",
+      "expected": "FAIL (masked replay: same epoch sequence number, different intent)",
+      "row_digest_ref": "b23083ddcf5296e7df3a00aa44d0d56d0021158cae4435dbe32b0aaff4e04d9a"
+    }
+  ]
+}
