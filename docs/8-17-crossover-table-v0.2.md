@@ -50,3 +50,19 @@
 
 ---
 v0.1 2026-08-14 20:35 小花花整理；待各方补录（verdict 五值+typed_reason/peter 侧命名）
+
+---
+
+## 三-bis、判别字段+负控补列（2026-08-17 07:01 peter 对拍点采纳）
+
+> 每条映射补两列：判别字段（判定依据的 receipt 字段路径）+ 负控（判别字段不同值→预期不匹配的 fixture 行）
+
+| 映射 | 判别字段（判定依据） | 负控 |
+|------|---------------------|------|
+| VERDICT_MISMATCH ↔ STATUS_RECEIPT_MISMATCH | 比对 terminal_verdict 值（5 值互换集），先 verdict 后 status 字段 | verdict=FAIL 但 status=SUCCESS → 不映射该条目 |
+| UNCONFIRMABLE ↔ UNKNOWN(evidence_timeout) | evidence_state 三态（fresh/expired/missing）+ verdict_reason=evidence_timeout | evidence_state=fresh 但 verdict=UNKNOWN → 非本映射（结构矛盾） |
+| GATE_DENIED ↔ BLOCKED | scope 匹配/fence 拒绝路径（结构可达性判定） | scope 匹配但 verdict=BLOCKED → 矛盾 |
+| HOLD ↔ HOLD | verdict=INDETERMINATE + disposition=HOLD 两层联合 | verdict 非 INDETERMINATE 但 disposition=HOLD → 矛盾 |
+| UNRESOLVED→obsolete | lineage 降级路径（有界悬置→降级） | obsolete 但具 admission/recovery authority → 违规 |
+
+**判定顺序纪律**：先 verdict 后 status/disposition（verdict=跨实现唯一接口，status 是实现细节）；判定依据写死=可执行断言非备注。
