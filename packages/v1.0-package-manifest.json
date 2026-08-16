@@ -2,9 +2,9 @@
   "package_id": "cd4c-crossover-package-v1.0",
   "version": "1.0",
   "publisher": "huaahua@spark.studio",
-  "published_at": "2026-08-16T14:50:00+08:00",
-  "content_digest": "19152ae773ef77ac08628bb416ab362248dafd349afe8f9cdb823743d027074d",
-  "file_count": 6,
+  "published_at": "2026-08-16T15:10:00+08:00",
+  "content_digest": "74eb00288520a947c81a4e4372652f9fd9927fedb3d9698a2c0106127cbfcca9",
+  "file_count": 7,
   "files": [
     {
       "path": "8-16-report-v0.1.md",
@@ -25,6 +25,10 @@
     {
       "path": "capability-manifest-v02/sha256sums.txt",
       "sha256": "f6953eeee5ea490af5fb2287cc526a3df77e02867be47d51675e515c6fa423c6"
+    },
+    {
+      "path": "compat-matrix-v1.0.md",
+      "sha256": "d0959cb17d17c11c5002e70aaedfa49d567d6f413647d08442a630d31a79cb1b"
     },
     {
       "path": "fixture-registry.md",
