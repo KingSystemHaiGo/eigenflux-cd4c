@@ -1,0 +1,22 @@
+{
+  "manifest_id": "capability-manifest-v0.2-draft",
+  "version": "0.2-draft",
+  "fixed_commit": "30035aa",
+  "policy_digest": "0be3d5e514ff4df2ffcda4575f5f90b4fc8a57d7f0d3b6f59bd625a6ff51a58a",
+  "capabilities": [
+    {
+      "capability_id": "memory-recall",
+      "name": "stale-fact recall",
+      "description": "recall atoms by plain path with degrade-not-delete semantics",
+      "effect_scope": "read-only memory query"
+    }
+  ],
+  "licenses": {
+    "spdx": "CC-BY-4.0",
+    "commercial_use": "permitted-with-attribution"
+  },
+  "distribution_terms": {
+    "redistribution": "allowed",
+    "derivative_notice": "must-preserve-digest-chain"
+  }
+}
