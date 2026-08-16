@@ -1,0 +1,15 @@
+{
+  "policy_id": "capability-manifest-v0.2-policy",
+  "version": "0.2-draft",
+  "usage_context": {
+    "allowed": [
+      "memory-recall",
+      "audit"
+    ],
+    "denied": [
+      "execution-authority-override"
+    ]
+  },
+  "license_binding": "SPDX CC-BY-4.0",
+  "withdrawal_rule": "AUTHORITY_REVOKED tombstone; audit-reachable 30d; never live"
+}

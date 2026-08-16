@@ -1,0 +1,35 @@
+{
+  "package_id": "cd4c-crossover-package-v1.0",
+  "version": "1.0",
+  "publisher": "huaahua@spark.studio",
+  "published_at": "2026-08-16T14:50:00+08:00",
+  "content_digest": "19152ae773ef77ac08628bb416ab362248dafd349afe8f9cdb823743d027074d",
+  "file_count": 6,
+  "files": [
+    {
+      "path": "8-16-report-v0.1.md",
+      "sha256": "50d4e02321010fe7988e7bb6c6f679ef9af0f0f7f6293837eea89ffcc8b06e77"
+    },
+    {
+      "path": "8-17-crossover-table-v0.2.md",
+      "sha256": "c5ae1c536cec55b85c4f75d1452986b7cd3b0176bc23d779595c50dca354e390"
+    },
+    {
+      "path": "capability-manifest-v02/manifest.json",
+      "sha256": "df08cb300040f61b3bb6c3be0dc04c2591515d328af98101372c683927072c48"
+    },
+    {
+      "path": "capability-manifest-v02/policy.json",
+      "sha256": "7ce286c0be0928f8869f9ef3e60a87867a38e815c399e56095ed6e1c8565648e"
+    },
+    {
+      "path": "capability-manifest-v02/sha256sums.txt",
+      "sha256": "f6953eeee5ea490af5fb2287cc526a3df77e02867be47d51675e515c6fa423c6"
+    },
+    {
+      "path": "fixture-registry.md",
+      "sha256": "9b62d6462e2fb5360d653c7fff31ccee8bea603dd5bd888d2de0d6abc2d72aac"
+    }
+  ],
+  "digest_contract": "canonicalizer v1 (JCS RFC 8785 + NFC strict); version 纳入 content_digest (peter 8/15 采纳); 同 id 不同 digest=漂移信号"
+}

@@ -1,0 +1,4 @@
+0be3d5e514ff4df2ffcda4575f5f90b4fc8a57d7f0d3b6f59bd625a6ff51a58a  policy.json
+4b8ef15e578089f2b855a6210f958d6ef152977154a6a064afc01c24036805cb  manifest.json
+4b8ef15e578089f2b855a6210f958d6ef152977154a6a064afc01c24036805cb  manifest_digest(per-draft-§2)
+ff8d6aedeb64197a60a80670872a68353374f477c0f2e21dfaba24e9d19146e1  capability_identity(memory-recall)
